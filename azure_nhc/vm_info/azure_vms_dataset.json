@@ -27680,6 +27680,11 @@
                 -0.05,
                 0.05
             ],
+            "hpl_performance": 2635,
+            "hpl_performance_limits": [
+                -0.05,
+                0.15
+            ],
             "vm_ram": 448,
             "pcie_accel_net_name": "Ethernet controller: Mellanox Technologies MT27710 Family",
             "pcie_ib_name": "Infiniband controller: Mellanox Technologies MT28908 Family",
@@ -27759,6 +27764,11 @@
             "stream_triad_limits": [
                 -0.05,
                 0.05
+            ],
+            "hpl_performance": 2635,
+            "hpl_performance_limits": [
+                -0.05,
+                0.15
             ],
             "vm_ram": 448,
             "pcie_accel_net_name": "Ethernet controller: Mellanox Technologies MT27710 Family",
@@ -27840,6 +27850,11 @@
                 -0.05,
                 0.05
             ],
+            "hpl_performance": 2635,
+            "hpl_performance_limits": [
+                -0.05,
+                0.15
+            ],
             "vm_ram": 448,
             "pcie_accel_net_name": "Ethernet controller: Mellanox Technologies MT27710 Family",
             "pcie_ib_name": "Infiniband controller: Mellanox Technologies MT28908 Family",
@@ -27919,6 +27934,11 @@
             "stream_triad_limits": [
                 -0.05,
                 0.05
+            ],
+            "hpl_performance": 2635,
+            "hpl_performance_limits": [
+                -0.05,
+                0.15
             ],
             "vm_ram": 448,
             "pcie_accel_net_name": "Ethernet controller: Mellanox Technologies MT27710 Family",
@@ -28003,6 +28023,11 @@
                 -0.05,
                 0.05
             ],
+            "hpl_performance": 2475,
+            "hpl_performance_limits": [
+                -0.05,
+                0.15
+            ],
             "vm_ram": 448,
             "pcie_accel_net_name": "Ethernet controller: Mellanox Technologies MT27710 Family",
             "pcie_ib_name": "Infiniband controller: Mellanox Technologies MT28908 Family",
@@ -28080,6 +28105,11 @@
             "stream_triad_limits": [
                 -0.05,
                 0.05
+            ],
+            "hpl_performance": 2635,
+            "hpl_performance_limits": [
+                -0.05,
+                0.15
             ],
             "vm_ram": 448,
             "pcie_accel_net_name": "Ethernet controller: Mellanox Technologies MT27710 Family",
