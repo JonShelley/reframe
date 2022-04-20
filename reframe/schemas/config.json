@@ -237,6 +237,7 @@
                     "stagedir": {"type": "string"},
                     "outputdir": {"type": "string"},
                     "resourcesdir": {"type": "string"},
+		    "vm_data_file": {"type": "string"},
                     "partitions": {
                         "type": "array",
                         "items": {

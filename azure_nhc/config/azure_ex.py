@@ -10,16 +10,62 @@
 site_configuration = {
     'systems': [
         {
-            'name': 'hb120rs_v3_centos-hpc_8_1-gen2_latest',
-            'descr': 'Azure HBv3x CentOS-HPC 8.1',
-            'hostnames': ['headnode'],
+            'name': 'hbrs_v3',
+            'descr': 'Azure HBv3',
+            'vm_data_file': 'azure_nhc/vm_info/azure_vms_dataset.json',
+            'hostnames': [''],
             'modules_system': 'tmod4',
             'partitions': [
                 {
                     'name': 'default',
                     'scheduler': 'local',
                     'launcher': 'local',
-                    'environs': ['gnu'],
+                    'environs': ['gnu-azhpc'],
+                }
+            ]
+        },
+        {
+            'name': 'hcrs',
+            'descr': 'Azure HC',
+            'vm_data_file': 'azure_nhc/vm_info/azure_vms_dataset.json',
+            'hostnames': [''],
+            'modules_system': 'tmod4',
+            'partitions': [
+                {
+                    'name': 'default',
+                    'scheduler': 'local',
+                    'launcher': 'local',
+                    'environs': ['gnu-azhpc'],
+                }
+            ]
+        },
+        {
+            'name': 'ndamsr_a100_v4',
+            'descr': 'Azure NDm v4',
+            'vm_data_file': 'azure_nhc/vm_info/azure_vms_dataset.json',
+            'hostnames': [''],
+            'modules_system': 'tmod4',
+            'partitions': [
+                {
+                    'name': 'gpu',
+                    'scheduler': 'local',
+                    'launcher': 'local',
+                    'environs': ['gnu-azhpc'],
+                }
+            ]
+        },
+        {
+            'name': 'ndasr_v4',
+            'descr': 'Azure ND v4',
+            'vm_data_file': 'azure_nhc/vm_info/azure_vms_dataset.json',
+            'hostnames': [''],
+            'modules_system': 'tmod4',
+            'partitions': [
+                {
+                    'name': 'gpu',
+                    'scheduler': 'local',
+                    'launcher': 'local',
+                    'environs': ['gnu-azhpc'],
                 }
             ]
         },
@@ -35,7 +81,7 @@ site_configuration = {
                     'environs': ['builtin']
                 }
             ]
-        },
+        }
     ],
     'environments': [
         {
@@ -45,12 +91,17 @@ site_configuration = {
             'ftn': ''
         },
         {
-            'name': 'gnu',
+            'name': 'gnu-azhpc',
             'modules': ['gcc-9.2.0'],
             'cc': 'gcc',
             'cxx': 'g++',
-            'ftn': 'gfortran',
-            'target_systems': ['hb120rs_v3_centos-hpc_8_1-gen2_latest']
+            'ftn': 'gfortran'
+        },
+        {
+            'name': 'gnu',
+            'cc': 'gcc',
+            'cxx': 'g++',
+            'ftn': 'gfortran'
         },
     ],
     'logging': [
