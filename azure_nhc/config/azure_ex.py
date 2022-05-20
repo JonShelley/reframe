@@ -10,6 +10,21 @@
 site_configuration = {
     'systems': [
         {
+            'name': 'hbrs_v2',
+            'descr': 'Azure HBv2',
+            'vm_data_file': 'azure_nhc/vm_info/azure_vms_dataset.json',
+            'hostnames': [''],
+            'modules_system': 'tmod32',
+            'partitions': [
+                {
+                    'name': 'default',
+                    'scheduler': 'local',
+                    'launcher': 'local',
+                    'environs': ['gnu-azhpc'],
+                }
+            ]
+        },
+        {
             'name': 'hbrs_v3',
             'descr': 'Azure HBv3',
             'vm_data_file': 'azure_nhc/vm_info/azure_vms_dataset.json',
