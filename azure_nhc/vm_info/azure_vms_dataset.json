@@ -28017,6 +28017,8 @@
             "eth_type": "eth_40g",
             "ib_count": 1,
             "ib_type": "ib_hdr",
+            "nvme_count": 1,
+            "nvme_type": "nvme_1tb",
             "sriov_enabled": true,
             "stream_triad": 320000,
             "stream_triad_limits": [
@@ -28037,7 +28039,8 @@
             "ib_rate": "4X",
             "ib_cutoff_8b_latency": "2.5",
             "ib_cutoff_4Mb_bibw": "20000",
-            "ib_link_layer": "InfiniBand"
+            "ib_link_layer": "InfiniBand",
+            "pcie_nvme_name": "Non-Volatile memory controller: Microsoft Corporation Device b111"
         }
     },
     "Standard_HB120rs_v3": {
