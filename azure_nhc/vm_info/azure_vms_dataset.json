@@ -26975,9 +26975,12 @@
                 -0.05,
                 0.05
             ],
+            "eth_state": "4: ACTIVE",
+            "eth_pstate": "5: LinkUp",
+            "eth_rate": "50 Gb/sec (2X EDR)",
             "pcie_accel_net_name": "Ethernet controller: Mellanox Technologies MT27710 Family",
-            "ib_state": "ACTIVE",
-            "ib_phys_state": "LINK_UP",
+            "ib_state": "Active",
+            "ib_pstate": "LinkUp",
             "ib_speed": "54000Mb/s",
             "ib_rate": "5 Gb/sec (1X DDR)",
             "ib_cutoff_8b_latency": 5.0,
@@ -27043,9 +27046,12 @@
                 -0.05,
                 0.05
             ],
+            "eth_state": "4: ACTIVE",
+            "eth_pstate": "5: LinkUp",
+            "eth_rate": "50 Gb/sec (2X EDR)",
             "pcie_accel_net_name": "Ethernet controller: Mellanox Technologies MT27710 Family",
-            "ib_state": "ACTIVE",
-            "ib_phys_state": "LINK_UP",
+            "ib_state": "Active",
+            "ib_pstate": "LinkUp",
             "ib_speed": "54000Mb/s",
             "ib_rate": "5 Gb/sec (1X DDR)",
             "ib_cutoff_8b_latency": 5.0,
@@ -27111,9 +27117,12 @@
                 -0.05,
                 0.05
             ],
+            "eth_state": "4: ACTIVE",
+            "eth_pstate": "5: LinkUp",
+            "eth_rate": "50 Gb/sec (2X EDR)",
             "pcie_accel_net_name": "Ethernet controller: Mellanox Technologies MT27710 Family",
-            "ib_state": "ACTIVE",
-            "ib_phys_state": "LINK_UP",
+            "ib_state": "Active",
+            "ib_pstate": "LinkUp",
             "ib_speed": "54000Mb/s",
             "ib_rate": "5 Gb/sec (1X DDR)",
             "ib_cutoff_8b_latency": 5.0,
@@ -27275,9 +27284,12 @@
                 -0.05,
                 0.05
             ],
+            "eth_state": "4: ACTIVE",
+            "eth_pstate": "5: LinkUp",
+            "eth_rate": "50 Gb/sec (2X EDR)",
             "pcie_accel_net_name": "Ethernet controller: Mellanox Technologies MT27710 Family",
-            "ib_state": "ACTIVE",
-            "ib_phys_state": "LINK_UP",
+            "ib_state": "Active",
+            "ib_pstate": "LinkUp",
             "ib_speed": "54000Mb/s",
             "ib_rate": "5 Gb/sec (1X DDR)",
             "ib_cutoff_8b_latency": 5.0,
@@ -27439,9 +27451,12 @@
                 -0.05,
                 0.05
             ],
+            "eth_state": "4: ACTIVE",
+            "eth_pstate": "5: LinkUp",
+            "eth_rate": "50 Gb/sec (2X EDR)",
             "pcie_accel_net_name": "Ethernet controller: Mellanox Technologies MT27710 Family",
-            "ib_state": "ACTIVE",
-            "ib_phys_state": "LINK_UP",
+            "ib_state": "Active",
+            "ib_pstate": "LinkUp",
             "ib_speed": "54000Mb/s",
             "ib_rate": "5 Gb/sec (1X DDR)",
             "ib_cutoff_8b_latency": 5.0,
@@ -27507,9 +27522,12 @@
                 -0.05,
                 0.05
             ],
+            "eth_state": "4: ACTIVE",
+            "eth_pstate": "5: LinkUp",
+            "eth_rate": "50 Gb/sec (2X EDR)",
             "pcie_accel_net_name": "Ethernet controller: Mellanox Technologies MT27710 Family",
-            "ib_state": "ACTIVE",
-            "ib_phys_state": "LINK_UP",
+            "ib_state": "Active",
+            "ib_pstate": "LinkUp",
             "ib_speed": "54000Mb/s",
             "ib_rate": "5 Gb/sec (1X DDR)",
             "ib_cutoff_8b_latency": 5.0,
@@ -27686,15 +27704,17 @@
                 0.15
             ],
             "vm_ram": 448,
+            "eth_state": "4: ACTIVE",
+            "eth_pstate": "5: LinkUp",
+            "eth_rate": "50 Gb/sec (2X EDR)",
             "pcie_accel_net_name": "Ethernet controller: Mellanox Technologies MT27710 Family",
-            "pcie_ib_name": "Infiniband controller: Mellanox Technologies MT28908 Family",
-            "ib_state": "PORT_ACTIVE",
-            "ib_phys_state": "LINK_UP",
-            "ib_speed": "50.0 Gbps",
-            "ib_rate": "4X",
+            "ib_state": "Active",
+            "ib_pstate": "LinkUp",
+            "ib_rate": "200",
             "ib_cutoff_8b_latency": "2.5",
             "ib_cutoff_4Mb_bibw": "20000",
             "ib_link_layer": "InfiniBand",
+            "pcie_ib_name": "Infiniband controller: Mellanox Technologies MT28908 Family",
             "pcie_nvme_name": "Non-Volatile memory controller: Microsoft Corporation Device b111"
         }
     },
@@ -27771,15 +27791,17 @@
                 0.15
             ],
             "vm_ram": 448,
+            "eth_state": "4: ACTIVE",
+            "eth_pstate": "5: LinkUp",
+            "eth_rate": "50 Gb/sec (2X EDR)",
             "pcie_accel_net_name": "Ethernet controller: Mellanox Technologies MT27710 Family",
-            "pcie_ib_name": "Infiniband controller: Mellanox Technologies MT28908 Family",
-            "ib_state": "PORT_ACTIVE",
-            "ib_phys_state": "LINK_UP",
-            "ib_speed": "50.0 Gbps",
-            "ib_rate": "4X",
+            "ib_state": "Active",
+            "ib_pstate": "LinkUp",
+            "ib_rate": "200",
             "ib_cutoff_8b_latency": "2.5",
             "ib_cutoff_4Mb_bibw": "20000",
             "ib_link_layer": "InfiniBand",
+            "pcie_ib_name": "Infiniband controller: Mellanox Technologies MT28908 Family",
             "pcie_nvme_name": "Non-Volatile memory controller: Microsoft Corporation Device b111"
         }
     },
@@ -27856,15 +27878,17 @@
                 0.15
             ],
             "vm_ram": 448,
+            "eth_state": "4: ACTIVE",
+            "eth_pstate": "5: LinkUp",
+            "eth_rate": "50 Gb/sec (2X EDR)",
             "pcie_accel_net_name": "Ethernet controller: Mellanox Technologies MT27710 Family",
-            "pcie_ib_name": "Infiniband controller: Mellanox Technologies MT28908 Family",
-            "ib_state": "PORT_ACTIVE",
-            "ib_phys_state": "LINK_UP",
-            "ib_speed": "50.0 Gbps",
-            "ib_rate": "4X",
+            "ib_state": "Active",
+            "ib_pstate": "LinkUp",
+            "ib_rate": "200",
             "ib_cutoff_8b_latency": "2.5",
             "ib_cutoff_4Mb_bibw": "20000",
             "ib_link_layer": "InfiniBand",
+            "pcie_ib_name": "Infiniband controller: Mellanox Technologies MT28908 Family",
             "pcie_nvme_name": "Non-Volatile memory controller: Microsoft Corporation Device b111"
         }
     },
@@ -27941,15 +27965,17 @@
                 0.15
             ],
             "vm_ram": 448,
+            "eth_state": "4: ACTIVE",
+            "eth_pstate": "5: LinkUp",
+            "eth_rate": "50 Gb/sec (2X EDR)",
             "pcie_accel_net_name": "Ethernet controller: Mellanox Technologies MT27710 Family",
-            "pcie_ib_name": "Infiniband controller: Mellanox Technologies MT28908 Family",
-            "ib_state": "PORT_ACTIVE",
-            "ib_phys_state": "LINK_UP",
-            "ib_speed": "50.0 Gbps",
-            "ib_rate": "4X",
+            "ib_state": "Active",
+            "ib_pstate": "LinkUp",
+            "ib_rate": "200",
             "ib_cutoff_8b_latency": "2.5",
             "ib_cutoff_4Mb_bibw": "20000",
             "ib_link_layer": "InfiniBand",
+            "pcie_ib_name": "Infiniband controller: Mellanox Technologies MT28908 Family",
             "pcie_nvme_name": "Non-Volatile memory controller: Microsoft Corporation Device b111"
         }
     },
@@ -28031,15 +28057,17 @@
                 0.15
             ],
             "vm_ram": 448,
+            "eth_state": "4: ACTIVE",
+            "eth_pstate": "5: LinkUp",
+            "eth_rate": "50 Gb/sec (2X EDR)",
             "pcie_accel_net_name": "Ethernet controller: Mellanox Technologies MT27710 Family",
-            "pcie_ib_name": "Infiniband controller: Mellanox Technologies MT28908 Family",
-            "ib_state": "PORT_ACTIVE",
-            "ib_phys_state": "LINK_UP",
-            "ib_speed": "50.0 Gbps",
-            "ib_rate": "4X",
+            "ib_state": "Active",
+            "ib_pstate": "LinkUp",
+            "ib_rate": "200",
             "ib_cutoff_8b_latency": "2.5",
             "ib_cutoff_4Mb_bibw": "20000",
             "ib_link_layer": "InfiniBand",
+            "pcie_ib_name": "Infiniband controller: Mellanox Technologies MT28908 Family",
             "pcie_nvme_name": "Non-Volatile memory controller: Microsoft Corporation Device b111"
         }
     },
@@ -28115,15 +28143,17 @@
                 0.15
             ],
             "vm_ram": 448,
+            "eth_state": "4: ACTIVE",
+            "eth_pstate": "5: LinkUp",
+            "eth_rate": "50 Gb/sec (2X EDR)",
             "pcie_accel_net_name": "Ethernet controller: Mellanox Technologies MT27710 Family",
-            "pcie_ib_name": "Infiniband controller: Mellanox Technologies MT28908 Family",
-            "ib_state": "PORT_ACTIVE",
-            "ib_phys_state": "LINK_UP",
-            "ib_speed": "50.0 Gbps",
-            "ib_rate": "4X",
+            "ib_state": "Active",
+            "ib_pstate": "LinkUp",
+            "ib_rate": "200",
             "ib_cutoff_8b_latency": "2.5",
             "ib_cutoff_4Mb_bibw": "20000",
             "ib_link_layer": "InfiniBand",
+            "pcie_ib_name": "Infiniband controller: Mellanox Technologies MT28908 Family",
             "pcie_nvme_name": "Non-Volatile memory controller: Microsoft Corporation Device b111"
         }
     },
@@ -28191,6 +28221,9 @@
                 0.05
             ],
             "vm_ram": 224,
+            "eth_state": "4: ACTIVE",
+            "eth_pstate": "5: LinkUp",
+            "eth_rate": "50 Gb/sec (2X EDR)",
             "pcie_accel_net_name": "Ethernet controller: Mellanox Technologies MT27710 Family"
         }
     },
@@ -28258,6 +28291,9 @@
                 0.05
             ],
             "vm_ram": 224,
+            "eth_state": "4: ACTIVE",
+            "eth_pstate": "5: LinkUp",
+            "eth_rate": "50 Gb/sec (2X EDR)",
             "pcie_accel_net_name": "Ethernet controller: Mellanox Technologies MT27710 Family"
         }
     },
@@ -28325,6 +28361,9 @@
                 0.05
             ],
             "vm_ram": 224,
+            "eth_state": "4: ACTIVE",
+            "eth_pstate": "5: LinkUp",
+            "eth_rate": "50 Gb/sec (2X EDR)",
             "pcie_accel_net_name": "Ethernet controller: Mellanox Technologies MT27710 Family"
         }
     },
@@ -28383,6 +28422,9 @@
                 0.05
             ],
             "vm_ram": 224,
+            "eth_state": "4: ACTIVE",
+            "eth_pstate": "5: LinkUp",
+            "eth_rate": "50 Gb/sec (2X EDR)",
             "pcie_accel_net_name": "Ethernet controller: Mellanox Technologies MT27710 Family"
         }
     },
@@ -28463,11 +28505,13 @@
                 0.05
             ],
             "vm_ram": 346,
+            "eth_state": "4: ACTIVE",
+            "eth_pstate": "5: LinkUp",
+            "eth_rate": "50 Gb/sec (2X EDR)",
             "pcie_accel_net_name": "Ethernet controller: Mellanox Technologies MT27710 Family",
-            "ib_state": "PORT_ACTIVE",
-            "ib_phys_state": "LINK_UP",
-            "ib_speed": "25.0 Gbps",
-            "ib_rate": "4X",
+            "ib_state": "Active",
+            "ib_pstate": "LinkUp",
+            "ib_rate": "100",
             "ib_cutoff_8b_latency": 2.5,
             "ib_cutoff_4Mb_bibw": 10000,
             "ib_link_layer": "InfiniBand",
@@ -28551,11 +28595,13 @@
                 0.05
             ],
             "vm_ram": 346,
+            "eth_state": "4: ACTIVE",
+            "eth_pstate": "5: LinkUp",
+            "eth_rate": "50 Gb/sec (2X EDR)",
             "pcie_accel_net_name": "Ethernet controller: Mellanox Technologies MT27710 Family",
-            "ib_state": "PORT_ACTIVE",
-            "ib_phys_state": "LINK_UP",
-            "ib_speed": "25.0 Gbps",
-            "ib_rate": "4X",
+            "ib_state": "Active",
+            "ib_pstate": "LinkUp",
+            "ib_rate": "100",
             "ib_cutoff_8b_latency": 2.5,
             "ib_cutoff_4Mb_bibw": 10000,
             "ib_link_layer": "InfiniBand",
@@ -28630,11 +28676,13 @@
                 0.05
             ],
             "vm_ram": 346,
+            "eth_state": "4: ACTIVE",
+            "eth_pstate": "5: LinkUp",
+            "eth_rate": "50 Gb/sec (2X EDR)",
             "pcie_accel_net_name": "Ethernet controller: Mellanox Technologies MT27710 Family",
-            "ib_state": "PORT_ACTIVE",
-            "ib_phys_state": "LINK_UP",
-            "ib_speed": "25.0 Gbps",
-            "ib_rate": "4X",
+            "ib_state": "Active",
+            "ib_pstate": "LinkUp",
+            "ib_rate": "100",
             "ib_cutoff_8b_latency": 2.5,
             "ib_cutoff_4Mb_bibw": 10000,
             "ib_link_layer": "InfiniBand",
@@ -31909,21 +31957,24 @@
                 0.05
             ],
             "vm_ram": 440,
+            "eth_state": "4: ACTIVE",
+            "eth_pstate": "5: LinkUp",
+            "eth_rate": "50 Gb/sec (2X EDR)",
             "pcie_accel_net_name": "Ethernet controller: Mellanox Technologies MT27710 Family",
             "ib_state": "PORT_ACTIVE",
-            "ib_phys_state": "LINK_UP",
+            "ib_pstate": "LINK_UP",
             "ib_speed": "10.0 Gbps",
             "ib_rate": "4X",
             "ib_cutoff_8b_latency": 2.7,
             "ib_cutoff_4Mb_bibw": 9000,
             "ib_link_layer": "InfiniBand",
-            "pcie_gpu_name": "3D controller: NVIDIA Corporation Device",
             "gpu_htod_bw": 12.2,
             "gpu_dtoh_bw": 11.1,
             "gpu_bw_variation": [
                 10.0,
                 14.0
-            ]
+            ],
+            "pcie_gpu_name": "3D controller: NVIDIA Corporation Device"
         }
     },
     "Standard_NC12_Promo": {
@@ -32315,21 +32366,24 @@
                 0.05
             ],
             "vm_ram": 440,
+            "eth_state": "4: ACTIVE",
+            "eth_pstate": "5: LinkUp",
+            "eth_rate": "50 Gb/sec (2X EDR)",
             "pcie_accel_net_name": "Ethernet controller: Mellanox Technologies MT27710 Family",
             "ib_state": "PORT_ACTIVE",
-            "ib_phys_state": "LINK_UP",
+            "ib_pstate": "LINK_UP",
             "ib_speed": "10.0 Gbps",
             "ib_rate": "4X",
             "ib_cutoff_8b_latency": 2.7,
             "ib_cutoff_4Mb_bibw": 9000,
             "ib_link_layer": "InfiniBand",
-            "pcie_gpu_name": "3D controller: NVIDIA Corporation Device",
             "gpu_htod_bw": 12.2,
             "gpu_dtoh_bw": 11.1,
             "gpu_bw_variation": [
                 10.0,
                 14.0
-            ]
+            ],
+            "pcie_gpu_name": "3D controller: NVIDIA Corporation Device"
         }
     },
     "Standard_NC24r_Promo": {
@@ -32498,21 +32552,24 @@
                 0.05
             ],
             "vm_ram": 440,
+            "eth_state": "4: ACTIVE",
+            "eth_pstate": "5: LinkUp",
+            "eth_rate": "50 Gb/sec (2X EDR)",
             "pcie_accel_net_name": "Ethernet controller: Mellanox Technologies MT27710 Family",
             "ib_state": "PORT_ACTIVE",
-            "ib_phys_state": "LINK_UP",
+            "ib_pstate": "LINK_UP",
             "ib_speed": "10.0 Gbps",
             "ib_rate": "4X",
             "ib_cutoff_8b_latency": 2.7,
             "ib_cutoff_4Mb_bibw": 9000,
             "ib_link_layer": "InfiniBand",
-            "pcie_gpu_name": "3D controller: NVIDIA Corporation Device",
             "gpu_htod_bw": 12.2,
             "gpu_dtoh_bw": 11.1,
             "gpu_bw_variation": [
                 10.0,
                 14.0
-            ]
+            ],
+            "pcie_gpu_name": "3D controller: NVIDIA Corporation Device"
         }
     },
     "Standard_NC24_Promo": {
@@ -32929,21 +32986,24 @@
                 0.05
             ],
             "vm_ram": 440,
+            "eth_state": "4: ACTIVE",
+            "eth_pstate": "5: LinkUp",
+            "eth_rate": "50 Gb/sec (2X EDR)",
             "pcie_accel_net_name": "Ethernet controller: Mellanox Technologies MT27710 Family",
             "ib_state": "PORT_ACTIVE",
-            "ib_phys_state": "LINK_UP",
+            "ib_pstate": "LINK_UP",
             "ib_speed": "10.0 Gbps",
             "ib_rate": "4X",
             "ib_cutoff_8b_latency": 2.7,
             "ib_cutoff_4Mb_bibw": 9000,
             "ib_link_layer": "InfiniBand",
-            "pcie_gpu_name": "3D controller: NVIDIA Corporation Device",
             "gpu_htod_bw": 12.2,
             "gpu_dtoh_bw": 11.1,
             "gpu_bw_variation": [
                 10.0,
                 14.0
-            ]
+            ],
+            "pcie_gpu_name": "3D controller: NVIDIA Corporation Device"
         }
     },
     "Standard_NC6_Promo": {
@@ -33201,22 +33261,24 @@
             ],
             "sriov_enabled": true,
             "vm_ram": 440,
+            "eth_state": "4: ACTIVE",
+            "eth_pstate": "5: LinkUp",
+            "eth_rate": "50 Gb/sec (2X EDR)",
             "pcie_accel_net_name": "Ethernet controller: Mellanox Technologies MT27710 Family",
-            "pcie_ib_name": "Infiniband controller: Mellanox Technologies MT28908 Family",
-            "ib_state": "PORT_ACTIVE",
-            "ib_phys_state": "LINK_UP",
-            "ib_speed": "50.0 Gbps",
-            "ib_rate": "4X",
+            "ib_state": "Active",
+            "ib_pstate": "LinkUp",
+            "ib_rate": "200",
             "ib_cutoff_8b_latency": "2.5",
             "ib_cutoff_4Mb_bibw": "20000",
             "ib_link_layer": "InfiniBand",
-            "pcie_gpu_name": "3D controller: NVIDIA Corporation Device",
+            "pcie_ib_name": "Infiniband controller: Mellanox Technologies MT28908 Family",
             "gpu_htod_bw": 13.2,
             "gpu_dtoh_bw": 12.1,
             "gpu_bw_variation": [
                 11.0,
                 14.0
-            ]
+            ],
+            "pcie_gpu_name": "3D controller: NVIDIA Corporation Device"
         }
     },
     "Standard_ND96amsr_A100_v4": {
@@ -33300,22 +33362,24 @@
                 0.05
             ],
             "vm_ram": 1770,
+            "eth_state": "4: ACTIVE",
+            "eth_pstate": "5: LinkUp",
+            "eth_rate": "50 Gb/sec (2X EDR)",
             "pcie_accel_net_name": "Ethernet controller: Mellanox Technologies MT27710 Family",
-            "ib_state": "PORT_ACTIVE",
-            "ib_phys_state": "LINK_UP",
-            "ib_speed": "25.0 Gbps",
-            "ib_rate": "4X",
+            "ib_state": "Active",
+            "ib_pstate": "LinkUp",
+            "ib_rate": "100",
             "ib_cutoff_8b_latency": 2.5,
             "ib_cutoff_4Mb_bibw": 10000,
             "ib_link_layer": "InfiniBand",
             "pcie_ib_name": "Infiniband controller: Mellanox Technologies MT27800 Family",
-            "pcie_gpu_name": "3D controller: NVIDIA Corporation Device",
             "gpu_htod_bw": 26.2,
             "gpu_dtoh_bw": 24.1,
             "gpu_bw_variation": [
                 23.0,
                 27.0
             ],
+            "pcie_gpu_name": "3D controller: NVIDIA Corporation Device",
             "pcie_nvme_name": "Non-Volatile memory controller: Microsoft Corporation Device b111"
         }
     },
@@ -33382,11 +33446,13 @@
                 0.05
             ],
             "vm_ram": 880,
+            "eth_state": "4: ACTIVE",
+            "eth_pstate": "5: LinkUp",
+            "eth_rate": "50 Gb/sec (2X EDR)",
             "pcie_accel_net_name": "Ethernet controller: Mellanox Technologies MT27710 Family",
-            "ib_state": "PORT_ACTIVE",
-            "ib_phys_state": "LINK_UP",
-            "ib_speed": "25.0 Gbps",
-            "ib_rate": "4X",
+            "ib_state": "Active",
+            "ib_pstate": "LinkUp",
+            "ib_rate": "100",
             "ib_cutoff_8b_latency": 2.5,
             "ib_cutoff_4Mb_bibw": 10000,
             "ib_link_layer": "InfiniBand",

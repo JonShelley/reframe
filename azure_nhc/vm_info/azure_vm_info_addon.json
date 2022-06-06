@@ -68,6 +68,17 @@
             "stream_triad_limits": [-0.05, 0.05],
             "vm_ram": 440
         },
+        "standardNCSv4Family": {
+            "processor": "intel",
+            "eth_type": "eth_80g",
+            "ib_count": 0,
+            "gpu_count": 4,
+            "gpu_type": "gpu_a100_80gb_pcie",
+            "sriov_enabled": true,
+            "stream_triad": 105000,
+            "stream_triad_limits": [-0.05, 0.05],
+            "vm_ram": 440
+        },
         "standardNDSv2Family": {
             "processor": "intel",
             "eth_type": "eth_40g",
@@ -112,11 +123,20 @@
     },
     "hardware":{
         "eth_40g":{
+            "eth_state": "4: ACTIVE",
+            "eth_pstate": "5: LinkUp",
+            "eth_rate": "50 Gb/sec (2X EDR)",
             "pcie_accel_net_name": "Ethernet controller: Mellanox Technologies MT27710 Family"
         },
+        "eth_80g":{
+            "eth_state": "4: ACTIVE",
+            "eth_pstate": "5: LinkUp",
+            "eth_rate": "100 Gb/sec (4X EDR)",
+            "pcie_accel_net_name": "Ethernet controller: Mellanox Technologies MT27800 Family"
+        },
         "ib_fdr":{
-            "ib_state":"ACTIVE",
-            "ib_phys_state": "LINK_UP",
+            "ib_state":"Active",
+            "ib_pstate": "LinkUp",
             "ib_speed": "54000Mb/s",
             "ib_rate": "5 Gb/sec (1X DDR)",
             "ib_cutoff_8b_latency": 5.0,
@@ -124,56 +144,60 @@
         },
         "ib_qdr":{
             "ib_state":"PORT_ACTIVE",
-            "ib_phys_state": "LINK_UP",
+            "ib_pstate": "LINK_UP",
             "ib_speed": "10.0 Gbps",
             "ib_rate": "4X",
             "ib_cutoff_8b_latency": 2.7,
             "ib_cutoff_4Mb_bibw": 9000,
             "ib_link_layer": "InfiniBand"
         },
-        "ib_hdr":{
-            "pcie_ib_name": "Infiniband controller: Mellanox Technologies MT28908 Family",
-            "ib_state":"PORT_ACTIVE",
-            "ib_phys_state": "LINK_UP",
-            "ib_speed": "50.0 Gbps",
-            "ib_rate": "4X",
-            "ib_cutoff_8b_latency": "2.5",
-            "ib_cutoff_4Mb_bibw": "20000",
-            "ib_link_layer": "InfiniBand"
-        },		
         "ib_edr":{
-            "ib_state":"PORT_ACTIVE",
-            "ib_phys_state": "LINK_UP",
-            "ib_speed": "25.0 Gbps",
-            "ib_rate": "4X",
+            "ib_state":"Active",
+            "ib_pstate": "LinkUp",
+            "ib_rate": "100",
             "ib_cutoff_8b_latency": 2.5,
             "ib_cutoff_4Mb_bibw": 10000,
             "ib_link_layer": "InfiniBand",
             "pcie_ib_name": "Infiniband controller: Mellanox Technologies MT27800 Family"
         },
+        "ib_hdr":{
+            "ib_state":"Active",
+            "ib_pstate": "LinkUp",
+            "ib_rate": "200",
+            "ib_cutoff_8b_latency": "2.5",
+            "ib_cutoff_4Mb_bibw": "20000",
+            "ib_link_layer": "InfiniBand",
+            "pcie_ib_name": "Infiniband controller: Mellanox Technologies MT28908 Family"
+        },		
         "gpu_v100_pcie":{
-             "pcie_gpu_name": "3D controller: NVIDIA Corporation Device",
              "gpu_htod_bw": 12.2,
              "gpu_dtoh_bw": 11.1,
-             "gpu_bw_variation": [10.0, 14.0]
+             "gpu_bw_variation": [10.0, 14.0],
+             "pcie_gpu_name": "3D controller: NVIDIA Corporation Device"
         },	
         "gpu_v100_sxm":{
-             "pcie_gpu_name": "3D controller: NVIDIA Corporation Device",
              "gpu_htod_bw": 13.2,
              "gpu_dtoh_bw": 12.1,
-             "gpu_bw_variation": [11.0, 14.0]
+             "gpu_bw_variation": [11.0, 14.0],
+             "pcie_gpu_name": "3D controller: NVIDIA Corporation Device"
         },	
         "gpu_a100_40gb_sxm":{
-             "pcie_gpu_name": "3D controller: NVIDIA Corporation Device",
              "gpu_htod_bw": 26.2,
              "gpu_dtoh_bw": 24.1,
-             "gpu_bw_variation": [23.0, 27.0]
+             "gpu_bw_variation": [23.0, 27.0],
+             "pcie_gpu_name": "3D controller: NVIDIA Corporation Device"
+        },
+        "gpu_a100_80gb_pcie":{
+             "gpu_htod_bw": 26.2,
+             "gpu_dtoh_bw": 24.1,
+             "gpu_bw_variation": [23.0, 27.0],
+             "pcie_gpu_name": "3D controller: NVIDIA Corporation Device"
         },
         "gpu_a100_80gb_sxm":{
-             "pcie_gpu_name": "3D controller: NVIDIA Corporation Device",
              "gpu_htod_bw": 26.2,
              "gpu_dtoh_bw": 24.1,
-             "gpu_bw_variation": [23.0, 27.0]
+             "gpu_bw_variation": [23.0, 27.0],
+             "pcie_gpu_name": "3D controller: NVIDIA Corporation Device"
         },
         "nvme_1tb":{
             "pcie_nvme_name": "Non-Volatile memory controller: Microsoft Corporation Device b111"
