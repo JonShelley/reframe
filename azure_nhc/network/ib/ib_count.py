@@ -67,7 +67,7 @@ class IBCardCheck(rfm.RunOnlyRegressionTest):
                 eth_states.append(device_state[x])
                 eth_pstates.append(device_pstate[x])
             else:
-                print("Undefined Link Layer: {}".format(ll)
+                print("Undefined Link Layer: {}".format(ll))
             
         print("IB Names: {}".format(ib_names))
         print("IB States: {}".format(ib_states))
