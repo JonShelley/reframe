@@ -78,12 +78,12 @@ class IBCardCheck(rfm.RunOnlyRegressionTest):
         #pprint.pprint(vars(self.current_system))
         #print("=========------------============")
         if vm_info != None and 'nhc_values' in vm_info and "ib_count" in vm_info['nhc_values']:
-            return sn.all(
+            return sn.all([
                 sn.assert_eq(sn.count(ib_names), vm_info['nhc_values']['ib_count']),
                 sn.all(sn.map(lambda x: sn.assert_eq(x, vm_info['nhc_values']['ib_rate']),ib_rates)),
                 sn.all(sn.map(lambda x: sn.assert_eq(x, vm_info['nhc_values']['ib_state']),ib_states)),
                 sn.all(sn.map(lambda x: sn.assert_eq(x, vm_info['nhc_values']['ib_pstate']),ib_pstates))
-            )
+            ])
         else:
             print("ib_count not found in vm_info['nhc_values']")
             return sn.assert_eq(sn.count(ib_names), 0)
