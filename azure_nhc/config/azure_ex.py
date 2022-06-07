@@ -107,7 +107,7 @@ site_configuration = {
         },
         {
             'name': 'gnu-azhpc',
-            'modules': ['gcc-9.2.0', 'mpi/hpcx'],
+            'modules': ['gcc-9.2.1', 'mpi/hpcx'],
             'cc': 'gcc',
             'cxx': 'g++',
             'ftn': 'gfortran'
