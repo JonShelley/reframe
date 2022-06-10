@@ -28056,6 +28056,26 @@
                 -0.05,
                 0.15
             ],
+            "ssd_wrtpt": 1000,
+            "ssd_wrtpt_limits": [
+                -0.1,
+                0.1
+            ],
+            "ssd_wriops": 165,
+            "ssd_wriops_limits": [
+                -0.1,
+                0.1
+            ],
+            "ssd_rdtpt": 1100,
+            "ssd_rdtpt_limits": [
+                -0.1,
+                0.1
+            ],
+            "ssd_rdiops": 230,
+            "ssd_rdiops_limits": [
+                -0.1,
+                0.1
+            ],
             "vm_ram": 448,
             "eth_state": "4: ACTIVE",
             "eth_pstate": "5: LinkUp",
