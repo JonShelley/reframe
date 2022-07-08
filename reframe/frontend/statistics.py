@@ -1,4 +1,4 @@
-# Copyright 2016-2021 Swiss National Supercomputing Centre (CSCS/ETH Zurich)
+# Copyright 2016-2022 Swiss National Supercomputing Centre (CSCS/ETH Zurich)
 # ReFrame Project Developers. See the top-level LICENSE file for details.
 #
 # SPDX-License-Identifier: BSD-3-Clause
@@ -70,7 +70,8 @@ class TestStats:
                     environ_name = t.check.current_environ.name
 
                 # Overwrite entry from previous run if available
-                messages[f"{t.check.name}:{partition_name}:{environ_name}"] = (
+                key = f"{t.check.unique_name}:{partition_name}:{environ_name}"
+                messages[key] = (
                     f"  * Test {t.check.info()} was retried {run} time(s) and "
                     f"{'failed' if t.failed else 'passed'}."
                 )
@@ -96,18 +97,20 @@ class TestStats:
                     'build_stderr': None,
                     'build_stdout': None,
                     'dependencies_actual': [
-                        (d.check.name, d.partition.fullname, d.environ.name)
+                        (d.check.unique_name,
+                         d.partition.fullname, d.environ.name)
                         for d in t.testcase.deps
                     ],
                     'dependencies_conceptual': [
                         d[0] for d in t.check.user_deps()
                     ],
                     'description': check.descr,
-                    'prefix': check.prefix,
+                    'display_name': check.display_name,
                     'filename': inspect.getfile(type(check)),
                     'environment': None,
                     'fail_phase': None,
                     'fail_reason': None,
+                    'fixture': check.is_fixture(),
                     'jobid': None,
                     'job_stderr': None,
                     'job_stdout': None,
@@ -116,6 +119,7 @@ class TestStats:
                     'nodelist': [],
                     'outputdir': None,
                     'perfvars': None,
+                    'prefix': check.prefix,
                     'result': None,
                     'stagedir': check.stagedir,
                     'scheduler': None,
@@ -126,7 +130,8 @@ class TestStats:
                     'time_run': t.duration('run_complete'),
                     'time_sanity': t.duration('sanity'),
                     'time_setup': t.duration('setup'),
-                    'time_total': t.duration('total')
+                    'time_total': t.duration('total'),
+                    'unique_name': check.unique_name
                 }
 
                 # We take partition and environment from the test case and not
@@ -186,6 +191,22 @@ class TestStats:
                             'value': val
                         })
 
+                # Add any loggable variables and parameters
+                entry['check_vars'] = {}
+                test_cls = type(check)
+                for name, var in test_cls.var_space.items():
+                    if var.is_loggable():
+                        try:
+                            entry['check_vars'][name] = getattr(check, name)
+                        except AttributeError:
+                            entry['check_vars'][name] = '<undefined>'
+
+                entry['check_params'] = {}
+                test_cls = type(check)
+                for name, param in test_cls.param_space.items():
+                    if param.is_loggable():
+                        entry['check_params'][name] = getattr(check, name)
+
                 testcases.append(entry)
 
             self._run_data.append({
@@ -199,7 +220,7 @@ class TestStats:
 
         return self._run_data
 
-    def print_failure_report(self, printer):
+    def print_failure_report(self, printer, rerun_info=True):
         line_width = 78
         printer.info(line_width * '=')
         printer.info('SUMMARY OF FAILURES')
@@ -213,8 +234,9 @@ class TestStats:
                 f'(for the last of {last_run} retries)' if last_run > 0 else ''
             )
             printer.info(line_width * '-')
-            printer.info(f"FAILURE INFO for {r['name']} {retry_info}")
-            printer.info(f"  * Test Description: {r['description']}")
+            printer.info(f"FAILURE INFO for {r['unique_name']} {retry_info}")
+            printer.info(f"  * Expanded name: {r['display_name']}")
+            printer.info(f"  * Description: {r['description']}")
             printer.info(f"  * System partition: {r['system']}")
             printer.info(f"  * Environment: {r['environment']}")
             printer.info(f"  * Stage directory: {r['stagedir']}")
@@ -222,7 +244,6 @@ class TestStats:
                 f"  * Node list: {util.nodelist_abbrev(r['nodelist'])}"
             )
             job_type = 'local' if r['scheduler'] == 'local' else 'batch job'
-            jobid = r['jobid']
             printer.info(f"  * Job type: {job_type} (id={r['jobid']})")
             printer.info(f"  * Dependencies (conceptual): "
                          f"{r['dependencies_conceptual']}")
@@ -230,8 +251,19 @@ class TestStats:
                          f"{r['dependencies_actual']}")
             printer.info(f"  * Maintainers: {r['maintainers']}")
             printer.info(f"  * Failing phase: {r['fail_phase']}")
-            printer.info(f"  * Rerun with '-n {r['name']}"
-                         f" -p {r['environment']} --system {r['system']} -r'")
+            if rerun_info and not r['fixture']:
+                if rt.runtime().get_option('general/0/compact_test_names'):
+                    cls = r['display_name'].split(' ')[0]
+                    variant = r['unique_name'].replace(cls, '')
+                    variant = variant.replace('_', '@')
+                    nameoptarg = cls + variant
+                else:
+                    nameoptarg = r['unique_name']
+
+                printer.info(f"  * Rerun with '-n {nameoptarg}"
+                             f" -p {r['environment']} --system "
+                             f"{r['system']} -r'")
+
             printer.info(f"  * Reason: {r['fail_reason']}")
 
             tb = ''.join(traceback.format_exception(*r['fail_info'].values()))
@@ -251,7 +283,8 @@ class TestStats:
             partfullname = partition.fullname if partition else 'None'
             environ_name = (check.current_environ.name
                             if check.current_environ else 'None')
-            f = f'[{check.name}, {environ_name}, {partfullname}]'
+            f = (f'[{check.display_name} (uid: {check.unique_name}), '
+                 f'{environ_name}, {partfullname}]')
             if tf.failed_stage not in failures:
                 failures[tf.failed_stage] = []
 
@@ -297,10 +330,10 @@ class TestStats:
         previous_part = ''
         for t in self.tasks():
             if t.check.perfvalues.keys():
-                if t.check.name != previous_name:
+                if t.check.unique_name != previous_name:
                     report_body.append(line_width * '-')
-                    report_body.append(t.check.name)
-                    previous_name = t.check.name
+                    report_body.append(t.check.display_name)
+                    previous_name = t.check.unique_name
 
                 if t.check.current_partition.fullname != previous_part:
                     report_body.append(

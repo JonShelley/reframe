@@ -1,6 +1,6 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "$id": "https://raw.githubusercontent.com/eth-cscs/reframe/master/reframe/schemas/runreport.json",
+    "$id": "https://raw.githubusercontent.com/reframe-hpc/reframe/master/reframe/schemas/runreport.json",
     "title": "Validation schema for ReFrame's run report",
     "defs": {
         "testcase_type": {
@@ -8,6 +8,8 @@
             "properties": {
                 "build_stderr": {"type": ["string", "null"]},
                 "build_stdout": {"type": ["string", "null"]},
+                "check_params": {"type": "object"},
+                "check_vars": {"type": "object"},
                 "dependencies_actual": {
                     "type": "array",
                     "items": {
@@ -22,6 +24,7 @@
                     "items": {"type": "string"}
                 },
                 "description": {"type": "string"},
+                "display_name": {"type": "string"},
                 "environment": {"type": ["string", "null"]},
                 "fail_info": {
                     "type": ["object", "null"],
@@ -39,6 +42,7 @@
                 "fail_reason": {"type": ["string", "null"]},
                 "fail_severe": {"type": "boolean"},
                 "filename": {"type": "string"},
+                "fixture": {"type": "boolean"},
                 "jobid": {"type": ["string", "null"]},
                 "job_stderr": {"type": ["string", "null"]},
                 "job_stdout": {"type": ["string", "null"]},
@@ -94,11 +98,10 @@
                 "time_run": {"type": ["number", "null"]},
                 "time_sanity": {"type": ["number", "null"]},
                 "time_setup": {"type": ["number", "null"]},
-                "time_total": {"type": ["number", "null"]}
+                "time_total": {"type": ["number", "null"]},
+                "unique_name": {"type": "string"}
             },
-            "required": [
-                "environment", "name", "result", "system", "filename"
-            ]
+            "required": ["environment", "stagedir", "system", "unique_name"]
         }
     },
     "type": "object",
@@ -142,9 +145,7 @@
                         "items": {"$ref": "#/defs/testcase_type"}
                     }
                 },
-                "required": [
-                    "num_cases", "num_failures", "num_aborted", "runid", "testcases"
-                ]
+                "required": ["testcases"]
             }
         }
     },

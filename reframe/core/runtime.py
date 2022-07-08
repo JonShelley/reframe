@@ -1,4 +1,4 @@
-# Copyright 2016-2021 Swiss National Supercomputing Centre (CSCS/ETH Zurich)
+# Copyright 2016-2022 Swiss National Supercomputing Centre (CSCS/ETH Zurich)
 # ReFrame Project Developers. See the top-level LICENSE file for details.
 #
 # SPDX-License-Identifier: BSD-3-Clause
@@ -162,13 +162,17 @@ class RuntimeContext:
         '''
         return self._system.modules_system
 
-    def get_option(self, option):
+    def get_option(self, option, default=None):
         '''Get a configuration option.
 
         :arg option: The option to be retrieved.
+        :arg default: The value to return if ``option`` cannot be retrieved.
         :returns: The value of the option.
+
+        .. versionchanged:: 3.11.0
+          Add ``default`` named argument.
         '''
-        return self._site_config.get(option)
+        return self._site_config.get(option, default=default)
 
 
 # Global resources for the current host
@@ -263,6 +267,113 @@ def is_env_loaded(environ):
                 for k, v in environ.variables.items()))
 
 
+def _is_valid_part(part, valid_systems):
+    for spec in valid_systems:
+        if spec[0] not in ('+', '-', '%'):
+            # This is the standard case
+            sysname, partname = part.fullname.split(':')
+            valid_matches = ['*', '*:*', sysname, f'{sysname}:*',
+                             f'*:{partname}', f'{part.fullname}']
+            if spec in valid_matches:
+                return True
+        else:
+            plus_feats = []
+            minus_feats = []
+            props = {}
+            for subspec in spec.split(' '):
+                if subspec.startswith('+'):
+                    plus_feats.append(subspec[1:])
+                elif subspec.startswith('-'):
+                    minus_feats.append(subspec[1:])
+                elif subspec.startswith('%'):
+                    key, val = subspec[1:].split('=')
+                    props[key] = val
+
+            have_plus_feats = all(
+                ft in part.features or ft in part.resources
+                for ft in plus_feats
+            )
+            have_minus_feats = any(
+                ft in part.features or ft in part.resources
+                for ft in minus_feats
+            )
+            try:
+                have_props = True
+                for k, v in props.items():
+                    extra_value = part.extras[k]
+                    extra_type  = type(extra_value)
+                    if extra_value != extra_type(v):
+                        have_props = False
+                        break
+            except (KeyError, ValueError):
+                have_props = False
+
+            if have_plus_feats and not have_minus_feats and have_props:
+                return True
+
+    return False
+
+
+def _is_valid_env(env, valid_prog_environs):
+    if '*' in valid_prog_environs:
+        return True
+
+    for spec in valid_prog_environs:
+        if spec[0] not in ('+', '-', '%'):
+            # This is the standard case
+            if env.name == spec:
+                return True
+        else:
+            plus_feats = []
+            minus_feats = []
+            props = {}
+            for subspec in spec.split(' '):
+                if subspec.startswith('+'):
+                    plus_feats.append(subspec[1:])
+                elif subspec.startswith('-'):
+                    minus_feats.append(subspec[1:])
+                elif subspec.startswith('%'):
+                    key, val = subspec[1:].split('=')
+                    props[key] = val
+
+            have_plus_feats = all(ft in env.features for ft in plus_feats)
+            have_minus_feats = any(ft in env.features
+                                   for ft in minus_feats)
+            try:
+                have_props = True
+                for k, v in props.items():
+                    extra_value = env.extras[k]
+                    extra_type  = type(extra_value)
+                    if extra_value != extra_type(v):
+                        have_props = False
+                        break
+            except (KeyError, ValueError):
+                have_props = False
+
+            if have_plus_feats and not have_minus_feats and have_props:
+                return True
+
+    return False
+
+
+def valid_sysenv_comb(valid_systems, valid_prog_environs,
+                      check_systems=True, check_environs=True):
+    ret = {}
+    curr_sys = runtime().system
+    for part in curr_sys.partitions:
+        if check_systems and not _is_valid_part(part, valid_systems):
+            continue
+
+        ret[part] = []
+        for env in part.environs:
+            if check_environs and not _is_valid_env(env, valid_prog_environs):
+                continue
+
+            ret[part].append(env)
+
+    return ret
+
+
 class temp_environment:
     '''Context manager to temporarily change the environment.'''
 
@@ -277,6 +388,20 @@ class temp_environment:
 
     def __exit__(self, exc_type, exc_value, traceback):
         self._environ_save.restore()
+
+
+class temp_config:
+    '''Context manager to temporarily switch to specific configuration.'''
+
+    def __init__(self, system):
+        self.__to = system
+        self.__from = runtime().system.name
+
+    def __enter__(self):
+        runtime().site_config.select_subconfig(self.__to)
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        runtime().site_config.select_subconfig(self.__from)
 
 
 # The following utilities are useful only for the unit tests

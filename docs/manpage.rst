@@ -114,10 +114,24 @@ This happens recursively so that if test ``T1`` depends on ``T2`` and ``T2`` dep
    Filter tests by name.
 
    ``NAME`` is interpreted as a `Python Regular Expression <https://docs.python.org/3/library/re.html>`__;
-   any test whose name matches ``NAME`` will be selected.
+   any test whose *display name* matches ``NAME`` will be selected.
+   The display name of a test encodes also any parameterization information.
+   See :ref:`test_naming_scheme` for more details on how the tests are automatically named by the framework.
+
+   Before matching, any whitespace will be removed from the display name of the test.
 
    This option may be specified multiple times, in which case tests with *any* of the specified names will be selected:
    ``-n NAME1 -n NAME2`` is therefore equivalent to ``-n 'NAME1|NAME2'``.
+
+   If the special notation ``<test_name>@<variant_num>`` is passed as the ``NAME`` argument, then an exact match will be performed selecting the variant ``variant_num`` of the test ``test_name``.
+
+   .. note::
+
+      Fixtures cannot be selected.
+
+   .. versionchanged:: 3.10.0
+
+      The option's behaviour was adapted and extended in order to work with the updated test naming scheme.
 
 .. option:: -p, --prgenv=NAME
 
@@ -189,15 +203,42 @@ An action must always be specified.
 
    .. versionadded:: 3.4.1
 
-.. option:: -L, --list-detailed
+.. option:: --describe
 
-   List selected tests providing detailed information per test.
+   Print a detailed description of the `selected tests <#test-filtering>`__ in JSON format and exit.
 
-.. option:: -l, --list
+   .. note::
+      The generated test description corresponds to its state after it has been initialized.
+      If any of its attributes are changed or set during its execution, their updated values will not be shown by this listing.
 
-   List selected tests.
+   .. versionadded:: 3.10.0
 
-   A single line per test is printed.
+
+.. option:: -L, --list-detailed[=T|C]
+
+   List selected tests providing more details for each test.
+
+   The unique id of each test (see also :attr:`~reframe.core.pipeline.RegressionTest.unique_name`) as well as the file where each test is defined are printed.
+
+   This option accepts optionally a single argument denoting what type of listing is requested.
+   Please refer to :option:`-l` for an explanation of this argument.
+
+   .. versionadded:: 3.10.0
+      Support for different types of listing is added.
+
+.. option:: -l, --list[=T|C]
+
+   List selected tests and their dependencies.
+
+   This option accepts optionally a single argument denoting what type of listing is requested.
+   There are two types of possible listings:
+
+   - *Regular test listing* (``T``, the default): This type of listing lists the tests and their dependencies or fixtures using their :attr:`~reframe.core.pipeline.RegressionTest.display_name`. A test that is listed as a dependency of another test will not be listed separately.
+   - *Concretized test case listing* (``C``): This type of listing lists the exact test cases and their dependencies as they have been concretized for the current system and environment combinations.
+     This listing shows practically the exact test DAG that will be executed.
+
+   .. versionadded:: 3.10.0
+      Support for different types of listing is added.
 
 .. option:: --list-tags
 
@@ -211,12 +252,26 @@ An action must always be specified.
 
    Execute the selected tests.
 
-If more than one action options are specified, :option:`-l` precedes :option:`-L`, which in turn precedes :option:`-r`.
+If more than one action options are specified, the precedence order is the following:
+
+   .. code-block:: console
+
+      --describe > --list-detailed > --list > --list-tags > --ci-generate
 
 
 ----------------------------------
 Options controlling ReFrame output
 ----------------------------------
+
+.. option:: --compress-report
+
+   Compress the generated run report (see :option:`--report-file`).
+   The generated report is a JSON file formatted in a human readable form.
+   If this option is enabled, the generated JSON file will be a single stream of text without additional spaces or new lines.
+
+   This option can also be set using the :envvar:`RFM_COMPRESS_REPORT` environment variable or the :js:attr:`compress_report` general configuration parameter.
+
+   .. versionadded:: 3.12.0
 
 .. option:: --dont-restage
 
@@ -334,6 +389,36 @@ Options controlling ReFrame execution
 
    .. versionadded:: 3.2
 
+.. option:: --distribute[=NODESTATE]
+
+   Distribute the selected tests on all the nodes in state ``NODESTATE`` in their respective valid partitions.
+
+   ReFrame will parameterize and run the tests on the selected nodes.
+   Effectively, it will dynamically create new tests that inherit from the original tests and add a new parameter named ``$nid`` which contains the list of nodes that the test must run on.
+   The new tests are named with the following pattern  ``{orig_test_basename}_{partition_fullname}``.
+
+   When determining the list of nodes to distribute the selected tests, ReFrame will take into account any job options passed through the :option:`-J` option.
+
+   You can optionally specify the state of the nodes to consider when distributing the test through the ``NODESTATE`` argument:
+
+   - ``all``: Tests will run on all the nodes of their respective valid partitions regardless of the nodes' state.
+   - ``idle``: Tests will run on all *idle* nodes of their respective valid partitions.
+   - ``NODESTATE``: Tests will run on all the nodes in state ``NODESTATE`` of their respective valid partitions.
+     If ``NODESTATE`` is not specified, ``idle`` will be assumed.
+
+   The state of the nodes will be determined once, before beginning the
+   execution of the tests, so it might be different at the time the tests are actually submitted.
+
+   .. note::
+      Currently, only single-node jobs can be distributed and only local or the Slurm-based backends support this feature.
+
+   .. note::
+      Distributing tests with dependencies is not supported.
+      However, you can distribute tests that use fixtures.
+
+
+   .. versionadded:: 3.11.0
+
 .. option:: --exec-policy=POLICY
 
    The execution policy to be used for running tests.
@@ -344,13 +429,13 @@ Options controlling ReFrame execution
    - ``async``: Tests will be executed asynchronously.
      This is the default policy.
 
-     The ``async`` execution policy executes the run phase of tests asynchronously by submitting their associated jobs in a non-blocking way.
-     ReFrame's runtime monitors the progress of each test and will resume the pipeline execution of an asynchronously spawned test as soon as its run phase has finished.
+     The ``async`` execution policy executes the build and run phases of tests asynchronously by submitting their associated jobs in a non-blocking way.
+     ReFrame's runtime monitors the progress of each test and will resume the pipeline execution of an asynchronously spawned test as soon as its build or run phase have finished.
      Note that the rest of the pipeline stages are still executed sequentially in this policy.
 
      Concurrency can be controlled by setting the :js:attr:`max_jobs` system partition configuration parameter.
      As soon as the concurrency limit is reached, ReFrame will first poll the status of all its pending tests to check if any execution slots have been freed up.
-     If there are tests that have finished their run phase, ReFrame will keep pushing tests for execution until the concurrency limit is reached again.
+     If there are tests that have finished their build or run phase, ReFrame will keep pushing tests for execution until the concurrency limit is reached again.
      If no execution slots are available, ReFrame will throttle job submission.
 
 .. option:: --force-local
@@ -378,6 +463,13 @@ Options controlling ReFrame execution
 
    An execution mode is simply a predefined invocation of ReFrame that is set with the :js:attr:`modes` configuration parameter.
    If an option is specified both in an execution mode and in the command-line, then command-line takes precedence.
+
+.. option:: --repeat=N
+
+   Repeat the selected tests ``N`` times.
+   This option can be used in conjunction with the :option:`--distribute` option in which case the selected tests will be repeated multiple times and distributed on individual nodes of the system's partitions.
+
+   .. versionadded:: 3.12.0
 
 .. option:: --restore-session [REPORT1[,REPORT2,...]]
 
@@ -409,6 +501,10 @@ Options controlling ReFrame execution
 
    Set variable ``VAR`` in all tests or optionally only in test ``TEST`` to ``VAL``.
 
+   ``TEST`` can have the form ``[TEST.][FIXT.]*``, in which case ``VAR`` will be set in fixture ``FIXT`` of ``TEST``.
+   Note that this syntax is recursive on fixtures, so that a variable can be set in a fixture arbitrarily deep.
+   ``TEST`` prefix refers to the test class name, *not* the test name, but ``FIXT`` refers to the fixture name *inside* the referenced test.
+
    Multiple variables can be set at the same time by passing this option multiple times.
    This option *cannot* change arbitrary test attributes, but only test variables declared with the :attr:`~reframe.core.pipeline.RegressionMixin.variable` built-in.
    If an attempt is made to change an inexistent variable or a test parameter, a warning will be issued.
@@ -435,8 +531,6 @@ Options controlling ReFrame execution
 
    Conversions to arbitrary objects are also supported.
    See :class:`~reframe.utility.typecheck.ConvertibleType` for more details.
-
-   The optional ``TEST.`` prefix refers to the test class name, *not* the test name.
 
    Variable assignments passed from the command line happen *before* the test is instantiated and is the exact equivalent of assigning a new value to the variable *at the end* of the test class body.
    This has a number of implications that users of this feature should be aware of:
@@ -485,6 +579,10 @@ Options controlling ReFrame execution
    .. versionchanged:: 3.9.3
 
       Proper handling of boolean variables.
+
+   .. versionchanged:: 3.11.1
+
+      Allow setting variables in fixtures.
 
 
 .. option:: --skip-performance-check
@@ -739,7 +837,6 @@ Miscellaneous options
    If this option is not specified, ReFrame will try to pick the correct configuration entry automatically.
    It does so by trying to match the hostname of the current machine again the hostname patterns defined in the :js:attr:`hostnames` system configuration parameter.
    The system with the first match becomes the current system.
-   For Cray systems, ReFrame will first look for the *unqualified machine name* in ``/etc/xthostname`` before trying retrieving the hostname of the current machine.
 
    This option can also be set using the :envvar:`RFM_SYSTEM` environment variable.
 
@@ -766,6 +863,121 @@ Miscellaneous options
    This option can also be set using the :envvar:`RFM_VERBOSE` environment variable or the :js:attr:`verbose` general configuration parameter.
 
 
+.. _test_naming_scheme:
+
+Test Naming Scheme
+------------------
+
+.. versionadded:: 3.10.0
+
+This section describes the new test naming scheme which will replace the current one in ReFrame 4.0.
+It can be enabled by setting the :envvar:`RFM_COMPACT_TEST_NAMES` environment variable.
+
+Each ReFrame test is assigned a unique name, which will be used internally by the framework to reference the test.
+Any test-specific path component will use that name, too.
+It is formed as follows for the various types of tests:
+
+- *Regular tests*: The unique name is simply the test class name.
+  This implies that you cannot load two tests with the same class name within the same run session even if these tests reside in separate directories.
+- *Parameterized tests*: The unique name is formed by the test class name followed by an ``_`` and the variant number of the test.
+  Each point in the parameter space of the test is assigned a unique variant number.
+- *Fixtures*: The unique name is formed by the test class name followed by an ``_`` and a hash.
+  The hash is constructed by combining the information of the fixture variant (if the fixture is parameterized), the fixture's scope and any fixture variables that were explicitly set.
+
+Since unique names can be cryptic, they are not listed by the :option:`-l` option, but are listed when a detailed listing is requested by using the :option:`-L` option.
+
+A human readable version of the test name, which is called the *display name*, is also constructed for each test.
+This name encodes all the parameterization information as well as the fixture-specific information (scopes, variables).
+The format of the display name is the following in BNF notation:
+
+.. code-block:: bnf
+
+   <display_name> ::= <test_class_name> (<params>)* (<scope>)?
+   <params> ::= "%" <parametrization> "=" <pvalue>
+   <parametrization> ::= (<fname> ".")* <pname>
+   <scope> ::= "~" <scope_descr>
+   <scope_descr> ::= <first> ("+" <second>)*
+
+   <test_class_name> ::= (* as in Python *)
+   <fname> ::= (* string *)
+   <pname> ::= (* string *)
+   <pvalue> ::= (* string *)
+   <first> ::= (* string *)
+   <second> ::= (* string *)
+
+The following is an example of a fictitious complex test that is itself parameterized and depends on parameterized fixtures as well.
+
+.. code-block:: python
+
+   import reframe as rfm
+
+
+   class MyFixture(rfm.RunOnlyRegressionTest):
+       p = parameter([1, 2])
+
+
+   class X(rfm.RunOnlyRegressionTest):
+       foo = variable(int, value=1)
+
+
+   @rfm.simple_test
+   class TestA(rfm.RunOnlyRegressionTest):
+       f = fixture(MyFixture, scope='test', action='join')
+       x = parameter([3, 4])
+       t = fixture(MyFixture, scope='test')
+       l = fixture(X, scope='environment', variables={'foo': 10})
+       valid_systems = ['*']
+       valid_prog_environs = ['*']
+
+
+Here is how this test is listed where the various components of the display name can be seen:
+
+.. code-block:: console
+
+   - TestA %x=4 %l.foo=10 %t.p=2
+       ^MyFixture %p=1 ~TestA_4_1
+       ^MyFixture %p=2 ~TestA_4_1
+       ^X %foo=10 ~generic:default+builtin
+   - TestA %x=3 %l.foo=10 %t.p=2
+       ^MyFixture %p=1 ~TestA_3_1
+       ^MyFixture %p=2 ~TestA_3_1
+       ^X %foo=10 ~generic:default+builtin
+   - TestA %x=4 %l.foo=10 %t.p=1
+       ^MyFixture %p=2 ~TestA_4_0
+       ^MyFixture %p=1 ~TestA_4_0
+       ^X %foo=10 ~generic:default+builtin
+   - TestA %x=3 %l.foo=10 %t.p=1
+       ^MyFixture %p=2 ~TestA_3_0
+       ^MyFixture %p=1 ~TestA_3_0
+       ^X %foo=10 ~generic:default+builtin
+   Found 4 check(s)
+
+Display names may not always be unique.
+In the following example:
+
+.. code-block:: python
+
+   class MyTest(RegressionTest):
+       p = parameter([1, 1, 1])
+
+This generates three different tests with different unique names, but their display name is the same for all: ``MyTest %p=1``.
+Notice that this example leads to a name conflict with the old naming scheme, since all tests would be named ``MyTest_1``.
+
+
+--------------------------------------
+Differences from the old naming scheme
+--------------------------------------
+
+Prior to version 3.10, ReFrame used to encode the parameter values of an instance of parameterized test in its name.
+It did so by taking the string representation of the value and replacing any non-alphanumeric character with an underscore.
+This could lead to very large and hard to read names when a test defined multiple parameters or the parameter type was more complex.
+Very large test names meant also very large path names which could also lead to problems and random failures.
+Fixtures followed a similar naming pattern making them hard to debug.
+
+The old naming scheme is still the default for parameterized tests (but not for fixtures) and will remain so until ReFrame 4.0, in order to ensure backward compatibility.
+However, users are advised to enable the new naming scheme by setting the :envvar:`RFM_COMPACT_TEST_NAMES` environment variable.
+
+
 Environment
 -----------
 
@@ -779,6 +991,64 @@ Boolean environment variables can have any value of ``true``, ``yes``, ``y`` (ca
 
 
 Here is an alphabetical list of the environment variables recognized by ReFrame:
+
+
+.. envvar:: RFM_AUTODETECT_FQDN
+
+   Use the fully qualified domain name as the hostname.
+   This is a boolean variable and defaults to ``1``.
+
+
+   .. table::
+      :align: left
+
+      ================================== ==================
+      Associated command line option     N/A
+      Associated configuration parameter N/A
+      ================================== ==================
+
+
+   .. versionadded:: 3.11.0
+
+
+.. envvar:: RFM_AUTODETECT_METHOD
+
+   Method to use for detecting the current system and pick the right configuration.
+   The following values can be used:
+
+   - ``hostname``: The ``hostname`` command will be used to detect the current system.
+     This is the default value, if not specified.
+
+   .. table::
+      :align: left
+
+      ================================== ==================
+      Associated command line option     N/A
+      Associated configuration parameter N/A
+      ================================== ==================
+
+
+   .. versionadded:: 3.11.0
+
+
+.. envvar:: RFM_AUTODETECT_XTHOSTNAME
+
+   Use ``/etc/xthostname`` file, if present, to retrieve the current system's name.
+   If the file cannot be found, the hostname will be retrieved using the ``hostname`` command.
+   This is a boolean variable and defaults to ``1``.
+
+   This option meaningful for Cray systems.
+
+   .. table::
+      :align: left
+
+      ================================== ==================
+      Associated command line option     N/A
+      Associated configuration parameter N/A
+      ================================== ==================
+
+
+   .. versionadded:: 3.11.0
 
 
 .. envvar:: RFM_CHECK_SEARCH_PATH
@@ -837,7 +1107,7 @@ Here is an alphabetical list of the environment variables recognized by ReFrame:
 
 .. envvar:: RFM_COMPACT_TEST_NAMES
 
-   Enable the compact test naming scheme.
+   Enable the new test naming scheme.
 
    .. table::
       :align: left
@@ -849,6 +1119,20 @@ Here is an alphabetical list of the environment variables recognized by ReFrame:
 
    .. versionadded:: 3.9.0
 
+
+.. envvar:: RFM_COMPRESS_REPORT
+
+   Compress the generated run report file.
+
+   .. table::
+      :align: left
+
+      ================================== ==================
+      Associated command line option     :option:`--compress-report`
+      Associated configuration parameter :js:attr:`compress_report` general configuration parameter
+      ================================== ==================
+
+   .. versionadded:: 3.12.0
 
 .. envvar:: RFM_CONFIG_FILE
 
@@ -1290,7 +1574,7 @@ Users may *not* modify this file.
 For a complete reference of the configuration, please refer to |reframe.settings(8)|_ man page.
 
 .. |reframe/core/settings.py| replace:: ``reframe/core/settings.py``
-.. _reframe/core/settings.py: https://github.com/eth-cscs/reframe/blob/master/reframe/core/settings.py
+.. _reframe/core/settings.py: https://github.com/reframe-hpc/reframe/blob/master/reframe/core/settings.py
 .. |reframe.settings(8)| replace:: ``reframe.settings(8)``
 .. _reframe.settings(8): config_reference.html
 
@@ -1298,7 +1582,7 @@ For a complete reference of the configuration, please refer to |reframe.settings
 Reporting Bugs
 --------------
 
-For bugs, feature request, help, please open an issue on Github: <https://github.com/eth-cscs/reframe>
+For bugs, feature request, help, please open an issue on Github: <https://github.com/reframe-hpc/reframe>
 
 
 See Also

@@ -1,4 +1,4 @@
-# Copyright 2016-2021 Swiss National Supercomputing Centre (CSCS/ETH Zurich)
+# Copyright 2016-2022 Swiss National Supercomputing Centre (CSCS/ETH Zurich)
 # ReFrame Project Developers. See the top-level LICENSE file for details.
 #
 # SPDX-License-Identifier: BSD-3-Clause
@@ -244,11 +244,16 @@ def test_select_subconfig():
     assert site_config.get('systems/0/partitions/0/scheduler') == 'local'
     assert site_config.get('systems/0/partitions/0/launcher') == 'local'
     assert (site_config.get('systems/0/partitions/0/environs') ==
-            ['PrgEnv-cray', 'PrgEnv-gnu'])
+            ['PrgEnv-cray', 'PrgEnv-gnu']
+            )
     assert site_config.get('systems/0/partitions/0/descr') == 'Login nodes'
     assert site_config.get('systems/0/partitions/0/resources') == []
     assert site_config.get('systems/0/partitions/0/access') == []
-    assert site_config.get('systems/0/partitions/0/container_platforms') == []
+    assert site_config.get('systems/0/partitions/0/container_platforms') == [
+        {'type': 'Sarus'},
+        {'type': 'Docker', 'default': True},
+        {'type': 'Singularity'}
+    ]
     assert site_config.get('systems/0/partitions/0/modules') == []
     assert site_config.get('systems/0/partitions/0/variables') == []
     assert site_config.get('systems/0/partitions/0/max_jobs') == 8
@@ -258,10 +263,14 @@ def test_select_subconfig():
     assert site_config.get('environments/@PrgEnv-cray/cc') == 'cc'
     assert site_config.get('environments/1/cxx') == 'CC'
     assert (site_config.get('environments/@PrgEnv-cray/modules') ==
-            [{'name': 'PrgEnv-cray', 'collection': False, 'path': None}])
+            [{'name': 'PrgEnv-cray', 'collection': False, 'path': None}]
+            )
     assert site_config.get('environments/@PrgEnv-gnu/extras') == {'foo': 1,
                                                                   'bar': 'x'}
+    assert site_config.get('environments/@PrgEnv-gnu/features') == ['cxx14']
     assert site_config.get('environments/@PrgEnv-cray/extras') == {}
+    assert site_config.get('environments/@PrgEnv-cray/features') == ['cxx14',
+                                                                     'mpi']
 
     assert len(site_config.get('general')) == 1
     assert site_config.get('general/0/check_search_path') == ['a:b']
@@ -286,7 +295,7 @@ def test_select_subconfig():
     assert site_config.get('general/0/check_search_path') == ['c:d']
 
     # Test default values for non-existent name-addressable objects
-    # See https://github.com/eth-cscs/reframe/issues/1339
+    # See https://github.com/reframe-hpc/reframe/issues/1339
     assert site_config.get('modes/@foo/options') == []
     assert site_config.get('modes/10/options') == []
 
@@ -352,13 +361,15 @@ def test_system_create():
     assert partition.scheduler.registered_name == 'slurm'
     assert partition.launcher_type.registered_name == 'srun'
     assert partition.access == []
-    assert partition.container_environs == {}
+    assert len(partition.container_environs) == 1
+    assert partition.container_runtime == 'Sarus'
     assert partition.local_env.modules == ['foogpu']
     assert partition.local_env.modules_detailed == [{
         'name': 'foogpu', 'collection': False, 'path': '/foo'
     }]
     assert partition.local_env.variables == {'FOO_GPU': 'yes'}
     assert partition.max_jobs == 10
+    assert partition.time_limit is None
     assert len(partition.environs) == 2
     assert partition.environment('PrgEnv-gnu').cc == 'cc'
     assert partition.environment('PrgEnv-gnu').cflags == []
@@ -386,3 +397,23 @@ def test_system_create():
     assert partition.processor.num_cores_per_socket == 4
     assert partition.processor.num_numa_nodes == 1
     assert partition.processor.num_cores_per_numa_node == 4
+
+    # Select another subconfig and check that the default selection of
+    # container runtime is done properly
+    site_config.select_subconfig('testsys:login')
+    system = System.create(site_config)
+    assert system.partitions[0].container_runtime == 'Docker'
+
+
+def test_hostname_autodetection():
+    # This exercises only the various execution paths
+
+    # We set the autodetection method and we call `select_subconfig()` in
+    # order to trigger the auto-detection
+    site_config = config.load_config('unittests/resources/settings.py')
+    for use_xthostname in (True, False):
+        for use_fqdn in (True, False):
+            site_config.set_autodetect_meth('hostname',
+                                            use_fqdn=use_fqdn,
+                                            use_xthostname=use_xthostname)
+            site_config.select_subconfig()
