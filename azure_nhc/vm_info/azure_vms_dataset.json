@@ -28051,34 +28051,11 @@
                 -0.05,
                 0.05
             ],
-            "hpl_performance": 2475,
+            "hpl_performance": 2650,
             "hpl_performance_limits": [
                 -0.05,
                 0.15
             ],
-<<<<<<< HEAD
-            "ssd_wrtpt": 1000,
-            "ssd_wrtpt_limits": [
-                -0.1,
-                0.1
-            ],
-            "ssd_wriops": 165,
-            "ssd_wriops_limits": [
-                -0.1,
-                0.1
-            ],
-            "ssd_rdtpt": 1100,
-            "ssd_rdtpt_limits": [
-                -0.1,
-                0.1
-            ],
-            "ssd_rdiops": 230,
-            "ssd_rdiops_limits": [
-                -0.1,
-                0.1
-            ],
-=======
->>>>>>> 10539b53efb7951d09267d9d39b8f9d195eff5f0
             "vm_ram": 448,
             "eth_state": "4: ACTIVE",
             "eth_pstate": "5: LinkUp",
@@ -28237,31 +28214,22 @@
             "processor": "amd",
             "eth_type": "eth_40g",
             "ib_count": 1,
-<<<<<<< HEAD
-=======
             "ib_type": "ib_edr",
->>>>>>> 10539b53efb7951d09267d9d39b8f9d195eff5f0
             "sriov_enabled": true,
             "stream_triad": 240000,
             "stream_triad_limits": [
                 -0.05,
                 0.05
             ],
-<<<<<<< HEAD
-=======
             "hpl_performance": 1238,
             "hpl_performance_limits": [
                 -0.05,
                 0.15
             ],
->>>>>>> 10539b53efb7951d09267d9d39b8f9d195eff5f0
             "vm_ram": 224,
             "eth_state": "4: ACTIVE",
             "eth_pstate": "5: LinkUp",
             "eth_rate": "50 Gb/sec (2X EDR)",
-<<<<<<< HEAD
-            "pcie_accel_net_name": "Ethernet controller: Mellanox Technologies MT27710 Family"
-=======
             "pcie_accel_net_name": "Ethernet controller: Mellanox Technologies MT27710 Family",
             "ib_state": "Active",
             "ib_pstate": "LinkUp",
@@ -28270,7 +28238,6 @@
             "ib_cutoff_4Mb_bibw": 10000,
             "ib_link_layer": "InfiniBand",
             "pcie_ib_name": "Infiniband controller: Mellanox Technologies MT27800 Family"
->>>>>>> 10539b53efb7951d09267d9d39b8f9d195eff5f0
         }
     },
     "Standard_HB60-30rs": {
@@ -28330,31 +28297,22 @@
             "processor": "amd",
             "eth_type": "eth_40g",
             "ib_count": 1,
-<<<<<<< HEAD
-=======
             "ib_type": "ib_edr",
->>>>>>> 10539b53efb7951d09267d9d39b8f9d195eff5f0
             "sriov_enabled": true,
             "stream_triad": 240000,
             "stream_triad_limits": [
                 -0.05,
                 0.05
             ],
-<<<<<<< HEAD
-=======
             "hpl_performance": 1238,
             "hpl_performance_limits": [
                 -0.05,
                 0.15
             ],
->>>>>>> 10539b53efb7951d09267d9d39b8f9d195eff5f0
             "vm_ram": 224,
             "eth_state": "4: ACTIVE",
             "eth_pstate": "5: LinkUp",
             "eth_rate": "50 Gb/sec (2X EDR)",
-<<<<<<< HEAD
-            "pcie_accel_net_name": "Ethernet controller: Mellanox Technologies MT27710 Family"
-=======
             "pcie_accel_net_name": "Ethernet controller: Mellanox Technologies MT27710 Family",
             "ib_state": "Active",
             "ib_pstate": "LinkUp",
@@ -28363,7 +28321,6 @@
             "ib_cutoff_4Mb_bibw": 10000,
             "ib_link_layer": "InfiniBand",
             "pcie_ib_name": "Infiniband controller: Mellanox Technologies MT27800 Family"
->>>>>>> 10539b53efb7951d09267d9d39b8f9d195eff5f0
         }
     },
     "Standard_HB60-45rs": {
@@ -28423,31 +28380,22 @@
             "processor": "amd",
             "eth_type": "eth_40g",
             "ib_count": 1,
-<<<<<<< HEAD
-=======
             "ib_type": "ib_edr",
->>>>>>> 10539b53efb7951d09267d9d39b8f9d195eff5f0
             "sriov_enabled": true,
             "stream_triad": 240000,
             "stream_triad_limits": [
                 -0.05,
                 0.05
             ],
-<<<<<<< HEAD
-=======
             "hpl_performance": 1238,
             "hpl_performance_limits": [
                 -0.05,
                 0.15
             ],
->>>>>>> 10539b53efb7951d09267d9d39b8f9d195eff5f0
             "vm_ram": 224,
             "eth_state": "4: ACTIVE",
             "eth_pstate": "5: LinkUp",
             "eth_rate": "50 Gb/sec (2X EDR)",
-<<<<<<< HEAD
-            "pcie_accel_net_name": "Ethernet controller: Mellanox Technologies MT27710 Family"
-=======
             "pcie_accel_net_name": "Ethernet controller: Mellanox Technologies MT27710 Family",
             "ib_state": "Active",
             "ib_pstate": "LinkUp",
@@ -28456,7 +28404,6 @@
             "ib_cutoff_4Mb_bibw": 10000,
             "ib_link_layer": "InfiniBand",
             "pcie_ib_name": "Infiniband controller: Mellanox Technologies MT27800 Family"
->>>>>>> 10539b53efb7951d09267d9d39b8f9d195eff5f0
         }
     },
     "Standard_HB60rs": {
@@ -28507,31 +28454,22 @@
             "processor": "amd",
             "eth_type": "eth_40g",
             "ib_count": 1,
-<<<<<<< HEAD
-=======
             "ib_type": "ib_edr",
->>>>>>> 10539b53efb7951d09267d9d39b8f9d195eff5f0
             "sriov_enabled": true,
             "stream_triad": 240000,
             "stream_triad_limits": [
                 -0.05,
                 0.05
             ],
-<<<<<<< HEAD
-=======
             "hpl_performance": 1238,
             "hpl_performance_limits": [
                 -0.05,
                 0.15
             ],
->>>>>>> 10539b53efb7951d09267d9d39b8f9d195eff5f0
             "vm_ram": 224,
             "eth_state": "4: ACTIVE",
             "eth_pstate": "5: LinkUp",
             "eth_rate": "50 Gb/sec (2X EDR)",
-<<<<<<< HEAD
-            "pcie_accel_net_name": "Ethernet controller: Mellanox Technologies MT27710 Family"
-=======
             "pcie_accel_net_name": "Ethernet controller: Mellanox Technologies MT27710 Family",
             "ib_state": "Active",
             "ib_pstate": "LinkUp",
@@ -28540,7 +28478,6 @@
             "ib_cutoff_4Mb_bibw": 10000,
             "ib_link_layer": "InfiniBand",
             "pcie_ib_name": "Infiniband controller: Mellanox Technologies MT27800 Family"
->>>>>>> 10539b53efb7951d09267d9d39b8f9d195eff5f0
         }
     },
     "Standard_HC44-16rs": {
@@ -28618,6 +28555,11 @@
             "stream_triad_limits": [
                 -0.05,
                 0.05
+            ],
+            "hpl_performance": 1780,
+            "hpl_performance_limits": [
+                -0.05,
+                0.15
             ],
             "vm_ram": 346,
             "eth_state": "4: ACTIVE",
@@ -28709,6 +28651,11 @@
                 -0.05,
                 0.05
             ],
+            "hpl_performance": 1780,
+            "hpl_performance_limits": [
+                -0.05,
+                0.15
+            ],
             "vm_ram": 346,
             "eth_state": "4: ACTIVE",
             "eth_pstate": "5: LinkUp",
@@ -28789,6 +28736,11 @@
             "stream_triad_limits": [
                 -0.05,
                 0.05
+            ],
+            "hpl_performance": 1780,
+            "hpl_performance_limits": [
+                -0.05,
+                0.15
             ],
             "vm_ram": 346,
             "eth_state": "4: ACTIVE",
