@@ -17,7 +17,10 @@ class IBCardCheck(rfm.RunOnlyRegressionTest):
     valid_prog_environs = ['*']
     executable = 'ibstat'
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 10539b53efb7951d09267d9d39b8f9d195eff5f0
     @sanity_function
     def validate_results(self):
         # Get node_data

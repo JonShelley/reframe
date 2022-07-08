@@ -11,7 +11,11 @@ import reframe.core.config as cfg
 import pprint
 
 @rfm.simple_test
+<<<<<<< HEAD
 class IBCardCheck(rfm.RunOnlyRegressionTest):
+=======
+class PCIeCheck(rfm.RunOnlyRegressionTest):
+>>>>>>> 10539b53efb7951d09267d9d39b8f9d195eff5f0
     descr = 'Check the number of IB cards'
     valid_systems = ['*']
     valid_prog_environs = ['*']

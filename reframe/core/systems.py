@@ -1,4 +1,4 @@
-# Copyright 2016-2021 Swiss National Supercomputing Centre (CSCS/ETH Zurich)
+# Copyright 2016-2022 Swiss National Supercomputing Centre (CSCS/ETH Zurich)
 # ReFrame Project Developers. See the top-level LICENSE file for details.
 #
 # SPDX-License-Identifier: BSD-3-Clause
@@ -7,6 +7,7 @@ import re
 import json
 
 import reframe.utility as util
+import reframe.core.azure as azure
 import reframe.utility.jsonext as jsonext
 from reframe.core.backends import (getlauncher, getscheduler)
 from reframe.core.environments import (Environment, ProgEnvironment)
@@ -163,10 +164,10 @@ class SystemPartition(jsonext.JSONSerializable):
        Users may not create :class:`SystemPartition` objects directly.
     '''
 
-    def __init__(self, parent, name, sched_type, launcher_type,
+    def __init__(self, *, parent, name, sched_type, launcher_type,
                  descr, access, container_environs, resources,
                  local_env, environs, max_jobs, prepare_cmds,
-                 processor, devices, extras):
+                 processor, devices, extras, features, time_limit):
         getlogger().debug(f'Initializing system partition {name!r}')
         self._parent_system = parent
         self._name = name
@@ -184,6 +185,8 @@ class SystemPartition(jsonext.JSONSerializable):
         self._processor = ProcessorInfo(processor)
         self._devices = [DeviceInfo(d) for d in devices]
         self._extras = extras
+        self._features = features
+        self._time_limit = time_limit
 
     @property
     def access(self):
@@ -245,6 +248,17 @@ class SystemPartition(jsonext.JSONSerializable):
         :type: integral
         '''
         return self._max_jobs
+
+    @property
+    def time_limit(self):
+        '''The time limit that will be used when submitting jobs to this
+        partition.
+
+        :type: :class:`str` or :obj:`None`
+
+        .. versionadded:: 3.11.0
+        '''
+        return self._time_limit
 
     @property
     def prepare_cmds(self):
@@ -365,13 +379,35 @@ class SystemPartition(jsonext.JSONSerializable):
 
     @property
     def extras(self):
-        '''User defined properties defined in the configuration.
+        '''User defined properties associated with this partition.
+
+        These extras are defined in the configuration.
 
         .. versionadded:: 3.5.0
 
         :type: :class:`Dict[str, object]`
         '''
         return self._extras
+
+    @property
+    def features(self):
+        '''User defined features associated with this partition.
+
+        These features are defined in the configuration.
+
+        .. versionadded:: 3.11.0
+
+        :type: :class:`List[str]`
+        '''
+        return self._features
+
+    def select_devices(self, devtype):
+        '''Return all devices of the requested type:
+
+        :arg devtype: The type of the device info objects to return.
+        :returns: A list of :class:`DeviceInfo` objects of the specified type.
+        '''
+        return [d for d in self.devices if d.device_type == devtype]
 
     def __eq__(self, other):
         if not isinstance(other, type(self)):
@@ -481,6 +517,7 @@ class System(jsonext.JSONSerializable):
                     modules=site_config.get(f'environments/@{e}/modules'),
                     variables=site_config.get(f'environments/@{e}/variables'),
                     extras=site_config.get(f'environments/@{e}/extras'),
+                    features=site_config.get(f'environments/@{e}/features'),
                     cc=site_config.get(f'environments/@{e}/cc'),
                     cxx=site_config.get(f'environments/@{e}/cxx'),
                     ftn=site_config.get(f'environments/@{e}/ftn'),
@@ -512,7 +549,9 @@ class System(jsonext.JSONSerializable):
                     prepare_cmds=site_config.get(f'{partid}/prepare_cmds'),
                     processor=site_config.get(f'{partid}/processor'),
                     devices=site_config.get(f'{partid}/devices'),
-                    extras=site_config.get(f'{partid}/extras')
+                    extras=site_config.get(f'{partid}/extras'),
+                    features=site_config.get(f'{partid}/features'),
+                    time_limit=site_config.get(f'{partid}/time_limit')
                 )
             )
 
@@ -520,6 +559,23 @@ class System(jsonext.JSONSerializable):
         # configuration parameters at the system level; if we came up to this
         # point, then all is good at the partition level, which is enough.
         site_config.select_subconfig(config_save, ignore_resolve_errors=True)
+        
+        # Check to see if node_data has been populated
+        #print("<<<<<<<<<<<<< Node data: {}".format(site_config.get('systems/0/node_data')))
+        vm_data = site_config.get('systems/0/node_data')
+        if vm_data == None:
+             vm_data_file = site_config.get('systems/0/vm_data_file')
+             vm_size = site_config.get('systems/0/vm_size')
+             if vm_data_file != None and vm_size != None:
+                 print("VM Data File: {}".format(vm_data_file))
+                 print("VM Size: {}".format(vm_size))
+                 vm_data = azure.read_vm_data_file(sysname,vm_data_file,vm_size,None,None,None)
+                 #print("VM Data: {}".format(vm_data))
+             else:
+                 print("VM Data File: {}".format(vm_data_file))
+                 print("VM Size: {}".format(vm_size))
+                 
+        
         return System(
             name=sysname,
             descr=site_config.get('systems/0/descr'),
@@ -535,7 +591,11 @@ class System(jsonext.JSONSerializable):
             resourcesdir=site_config.get('systems/0/resourcesdir'),
             stagedir=site_config.get('systems/0/stagedir'),
             partitions=partitions,
+<<<<<<< HEAD
             node_data=site_config.get('systems/0/node_data'),
+=======
+            node_data=vm_data
+>>>>>>> 10539b53efb7951d09267d9d39b8f9d195eff5f0
         )
 
     @property

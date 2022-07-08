@@ -1,5 +1,6 @@
 {
     "family":{
+<<<<<<< HEAD
         "standardHBv3Family": {
             "processor": "amd",
             "eth_type": "eth_40g",
@@ -13,6 +14,19 @@
             "hpl_performance": 2635,
             "hpl_performance_limits": [-0.05, 0.15],
             "vm_ram": 448
+=======
+        "standardHBSFamily": {
+            "processor": "amd",
+            "eth_type": "eth_40g",
+            "ib_count": 1,
+            "ib_type": "ib_edr",
+            "sriov_enabled": true,
+            "stream_triad": 240000,
+            "stream_triad_limits": [-0.05, 0.05],
+            "hpl_performance": 1238,
+            "hpl_performance_limits": [-0.05, 0.15],
+            "vm_ram": 224
+>>>>>>> 10539b53efb7951d09267d9d39b8f9d195eff5f0
         },
         "standardHBrsv2Family": {
             "processor": "amd",
@@ -26,6 +40,7 @@
             "stream_triad_limits": [-0.05, 0.05],
             "hpl_performance": 2475,
             "hpl_performance_limits": [-0.05, 0.15],
+<<<<<<< HEAD
             "ssd_wrtpt": 1000,
             "ssd_wrtpt_limits": [-0.1, 0.1],
             "ssd_wriops": 165,
@@ -44,6 +59,23 @@
             "sriov_enabled": false,
             "stream_triad": 82000,
             "stream_triad_limits": [-0.05, 0.05]
+=======
+            "vm_ram": 448
+        },
+        "standardHBv3Family": {
+            "processor": "amd",
+            "eth_type": "eth_40g",
+            "ib_count": 1,
+            "ib_type": "ib_hdr",
+	        "nvme_count": 2,
+	        "nvme_type": "nvme_1tb",
+            "sriov_enabled": true,
+            "stream_triad": 320000,
+            "stream_triad_limits": [-0.05, 0.05],
+            "hpl_performance": 2635,
+            "hpl_performance_limits": [-0.05, 0.15],
+            "vm_ram": 448
+>>>>>>> 10539b53efb7951d09267d9d39b8f9d195eff5f0
         },
         "standardHCSFamily": {
             "processor": "intel",
@@ -55,6 +87,7 @@
             "stream_triad_limits": [-0.05, 0.05],
             "vm_ram": 346
         },
+<<<<<<< HEAD
         "standardHBSFamily": {
             "processor": "amd",
             "eth_type": "eth_40g",
@@ -63,6 +96,16 @@
             "stream_triad": 240000,
             "stream_triad_limits": [-0.05, 0.05],
             "vm_ram": 224
+=======
+	    "standardHFamily": {
+            "processor": "intel",
+            "eth_type": "eth_40g",
+            "ib_count": 1,
+            "ib_type": "ib_fdr",
+            "sriov_enabled": false,
+            "stream_triad": 82000,
+            "stream_triad_limits": [-0.05, 0.05]
+>>>>>>> 10539b53efb7951d09267d9d39b8f9d195eff5f0
         },
         "standardNCSv3Family": {
             "processor": "intel",

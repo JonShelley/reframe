@@ -1,4 +1,4 @@
-# Copyright 2016-2021 Swiss National Supercomputing Centre (CSCS/ETH Zurich)
+# Copyright 2016-2022 Swiss National Supercomputing Centre (CSCS/ETH Zurich)
 # ReFrame Project Developers. See the top-level LICENSE file for details.
 #
 # SPDX-License-Identifier: BSD-3-Clause
@@ -7,6 +7,7 @@ import functools
 import glob
 import itertools
 import re
+import shlex
 import time
 from argparse import ArgumentParser
 from contextlib import suppress
@@ -19,7 +20,7 @@ from reframe.core.exceptions import (SpawnedProcessError,
                                      JobBlockedError,
                                      JobError,
                                      JobSchedulerError)
-from reframe.utility import seconds_to_hms
+from reframe.utility import nodelist_abbrev, seconds_to_hms
 
 
 def slurm_state_completed(state):
@@ -178,9 +179,9 @@ class SlurmJobScheduler(sched.JobScheduler):
                 self._format_option('%d:%d:%d' % (h, m, s), '--time={0}')
             )
 
-        if job.sched_exclusive_access:
+        if job.exclusive_access:
             preamble.append(
-                self._format_option(job.sched_exclusive_access, '--exclusive')
+                self._format_option(job.exclusive_access, '--exclusive')
             )
 
         if self._use_nodes_opt:
@@ -191,6 +192,14 @@ class SlurmJobScheduler(sched.JobScheduler):
             hint = None
         else:
             hint = 'multithread' if job.use_smt else 'nomultithread'
+
+        if job.pin_nodes:
+            preamble.append(
+                self._format_option(
+                    nodelist_abbrev(job.pin_nodes),
+                    '--nodelist={0}'
+                )
+            )
 
         for opt in job.sched_access:
             if not opt.strip().startswith(('-C', '--constraint')):
@@ -297,6 +306,11 @@ class SlurmJobScheduler(sched.JobScheduler):
         # create a mutable list out of the immutable SequenceView that
         # sched_access is
         options = job.sched_access + job.options + job.cli_options
+
+        # Properly split lexically all the arguments in the options list so as
+        # to treat correctly entries such as '--option foo'.
+        options = list(itertools.chain.from_iterable(shlex.split(opt)
+                                                     for opt in options))
         option_parser = ArgumentParser()
         option_parser.add_argument('--reservation')
         option_parser.add_argument('-p', '--partition')
@@ -502,25 +516,25 @@ class SlurmJobScheduler(sched.JobScheduler):
                 if node_match:
                     node_names = node_match['node_names']
                     if node_names:
-                        # Retrieve the info of the unavailable nodes
-                        # and check if they are indeed down
+                        # Retrieve the info of the unavailable nodes and check
+                        # if they are indeed down. According to Slurm's docs
+                        # this should not be necessary, but we check anyways
+                        # to be on the safe side.
                         self.log(f'Checking if nodes {node_names!r} '
                                  f'are indeed unavailable')
                         nodes = self._get_nodes_by_name(node_names)
                         if not any(n.is_down() for n in nodes):
                             return
-                    else:
-                        # List of unavailable nodes is empty; assume job
-                        # is pending
-                        return
 
-            self.cancel(job)
-            reason_msg = ('job cancelled because it was blocked due to '
-                          'a perhaps non-recoverable reason: ' + reason)
-            if reason_details is not None:
-                reason_msg += ', ' + reason_details
+                        self.cancel(job)
+                        reason_msg = (
+                            'job cancelled because it was blocked due to '
+                            'a perhaps non-recoverable reason: ' + reason
+                        )
+                        if reason_details is not None:
+                            reason_msg += ', ' + reason_details
 
-            job._exception = JobBlockedError(reason_msg, job.jobid)
+                        job._exception = JobBlockedError(reason_msg, job.jobid)
 
     def wait(self, job):
         # Quickly return in case we have finished already

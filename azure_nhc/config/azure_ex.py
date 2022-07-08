@@ -10,6 +10,7 @@
 site_configuration = {
     'systems': [
         {
+<<<<<<< HEAD
             'name': 'hbrs_v2',
             'descr': 'Azure HBv2',
             'vm_data_file': 'azure_nhc/vm_info/azure_vms_dataset.json',
@@ -21,6 +22,42 @@ site_configuration = {
                     'scheduler': 'local',
                     'launcher': 'local',
                     'environs': ['gnu-azhpc'],
+=======
+            'name': 'hbrs',
+            'descr': 'Azure HB',
+            'vm_data_file': 'azure_nhc/vm_info/azure_vms_dataset.json',
+            'vm_size': 'HB60rs',
+            'hostnames': ['*_hb_*'],
+            'modules_system': 'tmod32',
+            'partitions': [
+                {
+                    'name': 'hb',
+                    'scheduler': 'slurm',
+                    'launcher': 'srun',
+                    'max_jobs': 100,
+                    'access': ['-p hb'],
+                    'environs': ['gnu-azhpc-cos7'],
+                    'prepare_cmds': ['source /etc/profile.d/modules.sh']
+                }
+            ]
+        },
+        {
+            'name': 'hbrs_v2',
+            'descr': 'Azure HBv2',
+            'vm_data_file': 'azure_nhc/vm_info/azure_vms_dataset.json',
+            'vm_size': 'HB120rs_v2',
+            'hostnames': ['*_hbv2_*'],
+            'modules_system': 'tmod32',
+            'partitions': [
+                {
+                    'name': 'hbv2',
+                    'scheduler': 'slurm',
+                    'launcher': 'srun',
+                    'max_jobs': 100,
+                    'access': ['-p hbv2'],
+                    'environs': ['gnu-azhpc-cos7'],
+                    'prepare_cmds': ['source /etc/profile.d/modules.sh']
+>>>>>>> 10539b53efb7951d09267d9d39b8f9d195eff5f0
                 }
             ]
         },
@@ -28,6 +65,7 @@ site_configuration = {
             'name': 'hbrs_v3',
             'descr': 'Azure HBv3',
             'vm_data_file': 'azure_nhc/vm_info/azure_vms_dataset.json',
+<<<<<<< HEAD
             'hostnames': [''],
             'modules_system': 'tmod4',
             'partitions': [
@@ -36,6 +74,20 @@ site_configuration = {
                     'scheduler': 'local',
                     'launcher': 'local',
                     'environs': ['gnu-azhpc'],
+=======
+            'vm_size': 'HB120rs_v3',
+            'hostnames': ['*_hbv3_*'],
+            'modules_system': 'tmod32',
+            'partitions': [
+                {
+                    'name': 'hbv3',
+                    'scheduler': 'slurm',
+                    'launcher': 'srun',
+                    'max_jobs': 100,
+                    'access': ['-p hbv3'],
+                    'environs': ['gnu-azhpc-cos7'],
+                    'prepare_cmds': ['source /etc/profile.d/modules.sh']
+>>>>>>> 10539b53efb7951d09267d9d39b8f9d195eff5f0
                 }
             ]
         },
@@ -43,14 +95,24 @@ site_configuration = {
             'name': 'hcrs',
             'descr': 'Azure HC',
             'vm_data_file': 'azure_nhc/vm_info/azure_vms_dataset.json',
+<<<<<<< HEAD
             'hostnames': [''],
             'modules_system': 'tmod4',
+=======
+            'hostnames': ['*_hc_*'],
+            'modules_system': 'tmod32',
+>>>>>>> 10539b53efb7951d09267d9d39b8f9d195eff5f0
             'partitions': [
                 {
                     'name': 'default',
                     'scheduler': 'local',
                     'launcher': 'local',
+<<<<<<< HEAD
                     'environs': ['gnu-azhpc'],
+=======
+                    'environs': ['gnu-azhpc-cos7'],
+                    'prepare_cmds': ['source /etc/profile.d/modules.sh']
+>>>>>>> 10539b53efb7951d09267d9d39b8f9d195eff5f0
                 }
             ]
         },
@@ -66,6 +128,10 @@ site_configuration = {
                     'scheduler': 'local',
                     'launcher': 'local',
                     'environs': ['gnu-azhpc'],
+<<<<<<< HEAD
+=======
+                    'prepare_cmds': ['source /etc/profile.d/modules.sh']
+>>>>>>> 10539b53efb7951d09267d9d39b8f9d195eff5f0
                 }
             ]
         },
@@ -81,6 +147,10 @@ site_configuration = {
                     'scheduler': 'local',
                     'launcher': 'local',
                     'environs': ['gnu-azhpc'],
+<<<<<<< HEAD
+=======
+                    'prepare_cmds': ['source /etc/profile.d/modules.sh']
+>>>>>>> 10539b53efb7951d09267d9d39b8f9d195eff5f0
                 }
             ]
         },
@@ -93,7 +163,12 @@ site_configuration = {
                     'name': 'default',
                     'scheduler': 'local',
                     'launcher': 'local',
+<<<<<<< HEAD
                     'environs': ['builtin']
+=======
+                    'environs': ['builtin'],
+                    'prepare_cmds': ['source /etc/profile.d/modules.sh']
+>>>>>>> 10539b53efb7951d09267d9d39b8f9d195eff5f0
                 }
             ]
         }
@@ -107,6 +182,23 @@ site_configuration = {
         },
         {
             'name': 'gnu-azhpc',
+<<<<<<< HEAD
+=======
+            'modules': ['gcc-9.2.0', 'mpi/hpcx'],
+            'cc': 'gcc',
+            'cxx': 'g++',
+            'ftn': 'gfortran'
+        },
+        {
+            'name': 'gnu-azhpc-cos7',
+            'modules': ['gcc-9.2.0', 'mpi/hpcx'],
+            'cc': 'gcc',
+            'cxx': 'g++',
+            'ftn': 'gfortran'
+        },
+        {
+            'name': 'gnu-azhpc-cos8',
+>>>>>>> 10539b53efb7951d09267d9d39b8f9d195eff5f0
             'modules': ['gcc-9.2.1', 'mpi/hpcx'],
             'cc': 'gcc',
             'cxx': 'g++',

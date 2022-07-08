@@ -1,4 +1,4 @@
-# Copyright 2016-2021 Swiss National Supercomputing Centre (CSCS/ETH Zurich)
+# Copyright 2016-2022 Swiss National Supercomputing Centre (CSCS/ETH Zurich)
 # ReFrame Project Developers. See the top-level LICENSE file for details.
 #
 # SPDX-License-Identifier: BSD-3-Clause
@@ -24,6 +24,27 @@ site_configuration = {
             ]
         },
         {
+            'name': 'generic2',
+            'descr': 'Generic example system',
+            'hostnames': ['.*'],
+            'partitions': [
+                {
+                    'name': 'part1',
+                    'descr': 'Login nodes',
+                    'scheduler': 'local',
+                    'launcher': 'local',
+                    'environs': ['builtin']
+                },
+                {
+                    'name': 'part2',
+                    'descr': 'Login nodes',
+                    'scheduler': 'local',
+                    'launcher': 'local',
+                    'environs': ['builtin']
+                }
+            ]
+        },
+        {
             'name': 'testsys',
             'descr': 'Fake system for unit tests',
             'hostnames': ['testsys'],
@@ -37,7 +58,13 @@ site_configuration = {
                     'scheduler': 'local',
                     'launcher': 'local',
                     'environs': ['PrgEnv-cray', 'PrgEnv-gnu'],
-                    'descr': 'Login nodes'
+                    'descr': 'Login nodes',
+                    'features': ['cross_compile'],
+                    'container_platforms': [
+                        {'type': 'Sarus'},
+                        {'type': 'Docker', 'default': True},
+                        {'type': 'Singularity'}
+                    ]
                 },
                 {
                     'name': 'gpu',
@@ -63,6 +90,11 @@ site_configuration = {
                             ]
                         }
                     ],
+                    'features': ['cuda', 'mpi'],
+                    'extras': {
+                        'gpu_arch': 'a100'
+                    },
+                    'container_platforms': [{'type': 'Sarus'}],
                     'environs': ['PrgEnv-gnu', 'builtin'],
                     'max_jobs': 10,
                     'processor': {
@@ -174,6 +206,7 @@ site_configuration = {
             'cc': 'gcc',
             'cxx': 'g++',
             'ftn': 'gfortran',
+            'features': ['cxx14'],
             'extras': {
                 'foo': 1,
                 'bar': 'x'
@@ -183,6 +216,7 @@ site_configuration = {
         {
             'name': 'PrgEnv-cray',
             'modules': ['PrgEnv-cray'],
+            'features': ['cxx14', 'mpi'],
         },
         {
             'name': 'builtin',
@@ -273,6 +307,14 @@ site_configuration = {
         {
             'compact_test_names': True,
             'target_systems': ['sys1']
+        },
+        {
+            'git_timeout': 10,
+            'target_systems': ['generic2:part1']
+        },
+        {
+            'git_timeout': 20,
+            'target_systems': ['generic2:part2']
         }
     ]
 }

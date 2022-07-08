@@ -1,4 +1,4 @@
-# Copyright 2016-2021 Swiss National Supercomputing Centre (CSCS/ETH Zurich)
+# Copyright 2016-2022 Swiss National Supercomputing Centre (CSCS/ETH Zurich)
 # ReFrame Project Developers. See the top-level LICENSE file for details.
 #
 # SPDX-License-Identifier: BSD-3-Clause
@@ -16,6 +16,7 @@ import tempfile
 
 import reframe
 import reframe.core.settings as settings
+import reframe.core.azure as azure
 import reframe.utility as util
 from reframe.core.environments import normalize_module_list
 from reframe.core.exceptions import ConfigError, ReframeFatalError
@@ -60,13 +61,40 @@ def _normalize_syntax(conv):
     return _do_normalize
 
 
+def _hostname(use_fqdn, use_xthostname):
+    '''Return hostname'''
+    if use_xthostname:
+        try:
+            xthostname_file = '/etc/xthostname'
+            getlogger().debug(f'Trying {xthostname_file!r}...')
+            with open(xthostname_file) as fp:
+                return fp.read()
+        except OSError as e:
+            '''Log the error and continue to the next method'''
+            getlogger().debug(f'Failed to read {xthostname_file!r}')
+
+    if use_fqdn:
+        getlogger().debug('Using FQDN...')
+        return socket.getfqdn()
+
+    getlogger().debug('Using standard hostname...')
+    return socket.gethostname()
+
+
 class _SiteConfig:
     def __init__(self, site_config, filename):
         self._site_config = copy.deepcopy(site_config)
         self._filename = filename
-        self._local_config = {}
+        self._subconfigs = {}
         self._local_system = None
         self._sticky_options = {}
+        self._autodetect_meth = 'hostname'
+        self._autodetect_opts = {
+            'hostname': {
+                'use_fqdn': False,
+                'use_xthostname': False,
+            }
+        }
 
         # Open and store the JSON schema for later validation
         schema_filename = os.path.join(reframe.INSTALL_PREFIX, 'reframe',
@@ -76,15 +104,18 @@ class _SiteConfig:
                 self._schema = json.loads(fp.read())
             except json.JSONDecodeError as e:
                 raise ReframeFatalError(
-                    f"invalid configuration schema: '{schema_filename}'"
+                    f'invalid configuration schema: {schema_filename!r}'
                 ) from e
 
     def _pick_config(self):
-        return self._local_config if self._local_config else self._site_config
+        if self._local_system:
+            return self._subconfigs[self._local_system]
+        else:
+            return self._site_config
 
     def __repr__(self):
         return (f'{type(self).__name__}(site_config={self._site_config!r}, '
-                'filename={self._filename!r})')
+                f'filename={self._filename!r})')
 
     def __str__(self):
         return json.dumps(self._pick_config(), indent=2)
@@ -100,6 +131,15 @@ class _SiteConfig:
 
     def __getattr__(self, attr):
         return getattr(self._pick_config(), attr)
+
+    def set_autodetect_meth(self, method, **opts):
+        self._autodetect_meth = method
+        try:
+            self._autodetect_opts[method].update(opts)
+        except KeyError:
+            raise ConfigError(
+                f'unknown auto-detection method: {method!r}'
+            ) from None
 
     @property
     def schema(self):
@@ -328,21 +368,35 @@ class _SiteConfig:
         return False
 
     def _detect_system(self):
-        getlogger().debug('Detecting system')
-        if os.path.exists('/etc/xthostname'):
-            # Get the cluster name on Cray systems
+
+        if azure.check_if_azure_vm() == True:
             getlogger().debug(
-                "Found '/etc/xthostname': will use this to get the system name"
+                f'Detecting system using Azure'
             )
-            with open('/etc/xthostname') as fp:
-                hostname = fp.read()
-        else:
-            hostname = socket.getfqdn()
+            # Get the system name
+            system_info = azure.get_vm_info(self._site_config['systems'])
+            #system_name, vm_type, vm_data = azure.get_vm_info(self._site_config['systems'])
+            print("System Name: {}".format(system_info[0]))
+            print("VM Type: {}".format(system_info[1]))
+            print("VM Data: {}".format(system_info[2]))
+            for idx,system in enumerate(self._site_config['systems']):
+                print("idx: {}, system: {}".format(idx,system["name"]))
+                if system_info[0] == system["name"]:
+                    print("Setting system info")
+                    self._site_config['systems'][idx]['node_data'] = system_info[2]
+            return system_info[0]
+
+            #system_data = azure.get_system_data(vm_type, vm_data_file)
 
         getlogger().debug(
-            f'Looking for a matching configuration entry '
-            f'for system {hostname!r}'
+            f'Detecting system using method: {self._autodetect_meth!r}'
         )
+
+        hostname = _hostname(
+            self._autodetect_opts[self._autodetect_meth]['use_fqdn'],
+            self._autodetect_opts[self._autodetect_meth]['use_xthostname'],
+        )
+<<<<<<< HEAD
 
         # Check if machine is an azure machine
         vm_series = self._get_azure_vm_info()
@@ -351,6 +405,10 @@ class _SiteConfig:
             return sysname
 
         
+=======
+        getlogger().debug(f'Retrieved hostname: {hostname!r}')
+        getlogger().debug(f'Looking for a matching configuration entry')
+>>>>>>> 10539b53efb7951d09267d9d39b8f9d195eff5f0
         for system in self._site_config['systems']:
             for patt in system['hostnames']:
                 getlogger().debug(
@@ -396,12 +454,15 @@ class _SiteConfig:
 
     def select_subconfig(self, system_fullname=None,
                          ignore_resolve_errors=False):
-        if (self._local_system is not None and
-            self._local_system == system_fullname):
-            return
-
+        # First look for the current subconfig in the cache; if not found,
+        # generate it and cache it
         system_fullname = system_fullname or self._detect_system()
         getlogger().debug(f'Selecting subconfig for {system_fullname!r}')
+
+        self._local_system = system_fullname
+        if system_fullname in self._subconfigs:
+            return self._subconfigs[system_fullname]
+
         try:
             system_name, part_name = system_fullname.split(':', maxsplit=1)
         except ValueError:
@@ -411,7 +472,7 @@ class _SiteConfig:
         # Start from a fresh copy of the site_config, because we will be
         # modifying it
         site_config = copy.deepcopy(self._site_config)
-        self._local_config = {}
+        local_config = {}
         systems = list(
             filter(lambda x: x['name'] == system_name, site_config['systems'])
         )
@@ -436,7 +497,7 @@ class _SiteConfig:
             )
 
         # Create local configuration for the current or the requested system
-        self._local_config['systems'] = systems
+        local_config['systems'] = systems
         for name, section in site_config.items():
             if name == 'systems':
                 # The systems sections has already been treated
@@ -467,13 +528,18 @@ class _SiteConfig:
                 except KeyError:
                     pass
                 else:
+<<<<<<< HEAD
                     self._local_config.setdefault(name, [])
                     self._local_config[name].append(val)
         #print("Local Config: {}".format(self._local_config))
+=======
+                    local_config.setdefault(name, [])
+                    local_config[name].append(val)
+>>>>>>> 10539b53efb7951d09267d9d39b8f9d195eff5f0
 
         required_sections = self._schema['required']
         for name in required_sections:
-            if name not in self._local_config.keys():
+            if name not in local_config.keys():
                 if not ignore_resolve_errors:
                     raise ConfigError(
                         f"section '{name}' not defined "
@@ -488,7 +554,7 @@ class _SiteConfig:
                                    for p in systems[0]['partitions']))
             }
             found_environs = {
-                e['name'] for e in self._local_config['environments']
+                e['name'] for e in local_config['environments']
             }
             undefined_environs = sys_environs - found_environs
             if undefined_environs:
@@ -498,7 +564,7 @@ class _SiteConfig:
                     f"are not defined for '{system_fullname}'"
                 )
 
-        self._local_system = system_fullname
+        self._subconfigs[system_fullname] = local_config
 
 
 def convert_old_config(filename, newfilename=None):
