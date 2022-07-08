@@ -41,7 +41,7 @@ class FioSingleVMTest(rfm.RunOnlyRegressionTest):
     executable = 'fio'
     
     cmda = "echo \" system: $HOSTNAME FIOWriteTPT: "
-    cmdb = "$(grep \"WRITE:\" fio*.log | awk '{print $2}' | cut -d '=' -f2 | cut -d 'M' -f1)"
+    cmdb = "$(grep \"WRITE:\" fio*.log | awk '{print $2}' | cut -d '=' -f2 | cut -d 'M' -f1)\""
     cmdc = " > fio-test-results.log"
     cmd = cmda+cmdb+cmdc
     postrun_cmds = [
@@ -54,6 +54,7 @@ class FioSingleVMTest(rfm.RunOnlyRegressionTest):
     def set_fio_exec_options(self):
         vm_info = self.current_system.node_data
         vm_series = vm_info['vm_series']
+        disk_type = self.disk_type
         self.executable_opts = [
              '--name=write_throughput',
              '--directory=$TEMP_DIR',
