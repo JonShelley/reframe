@@ -83,6 +83,22 @@ site_configuration = {
             ]
         },
         {
+            'name': 'ncads_a100_v4',
+            'descr': 'Azure NC A100 v4',
+            'vm_data_file': 'azure_nhc/vm_info/azure_vms_dataset.json',
+            'hostnames': [''],
+            'modules_system': 'tmod4',
+            'partitions': [
+                {
+                    'name': 'nca100v4',
+                    'scheduler': 'local',
+                    'launcher': 'local',
+                    'environs': ['gnu-azhpc-ub20'],
+                    'prepare_cmds': ['source /etc/profile.d/modules.sh']
+                }
+            ]
+        },
+        {
             'name': 'ndamsr_a100_v4',
             'descr': 'Azure NDm v4',
             'vm_data_file': 'azure_nhc/vm_info/azure_vms_dataset.json',
