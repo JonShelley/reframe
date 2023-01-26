@@ -36854,6 +36854,8 @@
             "ib_count": 0,
             "gpu_count": 4,
             "gpu_type": "gpu_a100_80gb_pcie",
+            "nvme_count": 4,
+            "nvme_type": "nvme_1tb",
             "sriov_enabled": true,
             "stream_triad": 105000,
             "stream_triad_limits": [
@@ -36875,7 +36877,8 @@
                 25.0,
                 27.0
             ],
-            "pcie_gpu_name": "3D controller: NVIDIA Corporation Device"
+            "pcie_gpu_name": "3D controller: NVIDIA Corporation Device",
+            "pcie_nvme_name": "Non-Volatile memory controller: Microsoft Corporation Device b111"
         }
     },
     "Standard_NC24r": {
@@ -37458,6 +37461,8 @@
             "ib_count": 0,
             "gpu_count": 4,
             "gpu_type": "gpu_a100_80gb_pcie",
+            "nvme_count": 4,
+            "nvme_type": "nvme_1tb",
             "sriov_enabled": true,
             "stream_triad": 105000,
             "stream_triad_limits": [
@@ -37479,7 +37484,8 @@
                 25.0,
                 27.0
             ],
-            "pcie_gpu_name": "3D controller: NVIDIA Corporation Device"
+            "pcie_gpu_name": "3D controller: NVIDIA Corporation Device",
+            "pcie_nvme_name": "Non-Volatile memory controller: Microsoft Corporation Device b111"
         }
     },
     "Standard_NC4as_T4_v3": {
@@ -38074,6 +38080,8 @@
             "ib_count": 0,
             "gpu_count": 4,
             "gpu_type": "gpu_a100_80gb_pcie",
+            "nvme_count": 4,
+            "nvme_type": "nvme_1tb",
             "sriov_enabled": true,
             "stream_triad": 105000,
             "stream_triad_limits": [
@@ -38095,7 +38103,8 @@
                 25.0,
                 27.0
             ],
-            "pcie_gpu_name": "3D controller: NVIDIA Corporation Device"
+            "pcie_gpu_name": "3D controller: NVIDIA Corporation Device",
+            "pcie_nvme_name": "Non-Volatile memory controller: Microsoft Corporation Device b111"
         }
     },
     "Standard_NCC24ads_A100_v4": {
