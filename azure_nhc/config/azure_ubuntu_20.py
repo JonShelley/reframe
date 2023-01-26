@@ -15,7 +15,7 @@ site_configuration = {
             'vm_data_file': 'azure_nhc/vm_info/azure_vms_dataset.json',
             'vm_size': 'HB60rs',
             'hostnames': ['*_hb_*'],
-            'modules_system': 'tmod32',
+            'modules_system': 'tmod4',
             'partitions': [
                 {
                     'name': 'hb',
@@ -23,7 +23,7 @@ site_configuration = {
                     'launcher': 'srun',
                     'max_jobs': 100,
                     'access': ['-p hb'],
-                    'environs': ['gnu-azhpc-cos7'],
+                    'environs': ['gnu-azhpc-ub20'],
                     'prepare_cmds': ['source /etc/profile.d/modules.sh']
                 }
             ]
@@ -34,7 +34,7 @@ site_configuration = {
             'vm_data_file': 'azure_nhc/vm_info/azure_vms_dataset.json',
             'vm_size': 'HB120rs_v2',
             'hostnames': ['*_hbv2_*'],
-            'modules_system': 'tmod32',
+            'modules_system': 'tmod4',
             'partitions': [
                 {
                     'name': 'hbv2',
@@ -42,7 +42,7 @@ site_configuration = {
                     'launcher': 'srun',
                     'max_jobs': 100,
                     'access': ['-p hbv2'],
-                    'environs': ['gnu-azhpc-cos7'],
+                    'environs': ['gnu-azhpc-ub20'],
                     'prepare_cmds': ['source /etc/profile.d/modules.sh']
                 }
             ]
@@ -53,7 +53,7 @@ site_configuration = {
             'vm_data_file': 'azure_nhc/vm_info/azure_vms_dataset.json',
             'vm_size': 'HB120rs_v3',
             'hostnames': ['*_hbv3_*'],
-            'modules_system': 'tmod32',
+            'modules_system': 'tmod4',
             'partitions': [
                 {
                     'name': 'hbv3',
@@ -61,7 +61,7 @@ site_configuration = {
                     'launcher': 'srun',
                     'max_jobs': 100,
                     'access': ['-p hbv3'],
-                    'environs': ['gnu-azhpc-cos7'],
+                    'environs': ['gnu-azhpc-ub20'],
                     'prepare_cmds': ['source /etc/profile.d/modules.sh']
                 }
             ]
@@ -74,10 +74,10 @@ site_configuration = {
             'modules_system': 'tmod32',
             'partitions': [
                 {
-                    'name': 'default',
+                    'name': 'hc',
                     'scheduler': 'local',
                     'launcher': 'local',
-                    'environs': ['gnu-azhpc-cos7'],
+                    'environs': ['gnu-azhpc-ub20'],
                     'prepare_cmds': ['source /etc/profile.d/modules.sh']
                 }
             ]
@@ -90,10 +90,10 @@ site_configuration = {
             'modules_system': 'tmod4',
             'partitions': [
                 {
-                    'name': 'gpu',
+                    'name': 'ndmv4',
                     'scheduler': 'local',
                     'launcher': 'local',
-                    'environs': ['gnu-azhpc'],
+                    'environs': ['gnu-azhpc-ub20'],
                     'prepare_cmds': ['source /etc/profile.d/modules.sh']
                 }
             ]
@@ -106,10 +106,10 @@ site_configuration = {
             'modules_system': 'tmod4',
             'partitions': [
                 {
-                    'name': 'gpu',
+                    'name': 'ndv4',
                     'scheduler': 'local',
                     'launcher': 'local',
-                    'environs': ['gnu-azhpc'],
+                    'environs': ['gnu-azhpc-ub20'],
                     'prepare_cmds': ['source /etc/profile.d/modules.sh']
                 }
             ]
@@ -122,10 +122,10 @@ site_configuration = {
             'modules_system': 'tmod4',
             'partitions': [
                 {
-                    'name': 'gpu',
+                    'name': 'nva10v5',
                     'scheduler': 'local',
                     'launcher': 'local',
-                    'environs': ['gnu-azhpc'],
+                    'environs': ['gnu-azhpc-ub20'],
                     'prepare_cmds': ['source /etc/profile.d/modules.sh']
                 }
             ]
@@ -169,6 +169,13 @@ site_configuration = {
         {
             'name': 'gnu-azhpc-cos8',
             'modules': ['gcc-9.2.1', 'mpi/hpcx'],
+            'cc': 'gcc',
+            'cxx': 'g++',
+            'ftn': 'gfortran'
+        },
+        {
+            'name': 'gnu-azhpc-ub20',
+            'modules': ['mpi/hpcx'],
             'cc': 'gcc',
             'cxx': 'g++',
             'ftn': 'gfortran'
